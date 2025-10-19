@@ -1,186 +1,99 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Giới thiệu bản thân - Dev Terminal</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mình & Bạn — Trang Web Lập Trình</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
-
-    * {
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
-
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
     body {
       margin: 0;
-      padding: 0;
-      background-color: #000;
-      color: #fff;
-      font-family: 'Source Code Pro', monospace;
+      background-color: #0d0d0d;
+      color: #e6e6e6;
+      font-family: 'Fira Code', monospace;
       overflow-x: hidden;
-    }
-
-    section {
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      align-items: flex-start;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 1.2s ease;
-      padding: 40px 20px;
-      max-width: 900px;
-      margin: auto;
+      flex-direction: column;
+      transition: all 0.4s ease;
     }
 
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .terminal {
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff9d;
+      border-radius: 12px;
+      padding: 25px;
+      width: 90%;
+      max-width: 700px;
+      min-height: 320px;
+      box-shadow: 0 0 20px #00ffaa55;
+      overflow: hidden;
+      animation: fadeIn 1s ease-out;
     }
 
     .line {
-      width: 100%;
-      font-size: 1.1rem;
-      margin: 4px 0;
-      white-space: pre-wrap;
-      overflow-wrap: break-word;
+      line-height: 1.6;
+      overflow: hidden;
+      white-space: nowrap;
+      animation: typing 3s steps(40) 1s forwards;
+      opacity: 0;
     }
 
-    .cursor {
+    .line.visible {
+      opacity: 1;
+    }
+
+    .green { color: #00ff9d; }
+    .blue { color: #00b3ff; }
+    .red { color: #ff4d4d; }
+    .purple { color: #c38aff; }
+    .white { color: #ffffff; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; opacity: 1; }
+    }
+
+    .link {
       display: inline-block;
-      width: 10px;
-      background-color: #00ff99;
-      animation: blink 0.8s infinite;
-    }
-
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
-    }
-
-    .keyword { color: #00ccff; }
-    .string { color: #cc99ff; }
-    .log { color: #00ff99; }
-    .error { color: #ff5555; }
-    .default { color: #fff; }
-
-    .choice-container {
-      display: flex;
-      gap: 15px;
-      margin-top: 25px;
-      flex-wrap: wrap;
-    }
-
-    .choice {
-      background-color: #0f0f0f;
-      border: 1px solid #333;
-      color: #00ff99;
-      padding: 10px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .choice:hover {
-      background-color: #00ff99;
-      color: #000;
-      transform: scale(1.05);
-    }
-
-    .sample-box {
       margin-top: 20px;
-      border: 1px solid #222;
-      border-radius: 10px;
-      padding: 15px;
-      background: #0a0a0a;
-      font-size: 14px;
-      color: #ffb6c1;
-      text-align: left;
+      text-decoration: none;
+      color: #00b3ff;
+      border-bottom: 1px dashed #00b3ff;
+      transition: all 0.3s ease;
     }
 
-    .contact-box {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #bbb;
+    .link:hover {
+      color: #00ff9d;
+      border-color: #00ff9d;
     }
 
     @media (max-width: 600px) {
-      .line { font-size: 0.95rem; }
-      .choice { padding: 8px 14px; font-size: 14px; }
+      .terminal { font-size: 14px; padding: 15px; }
     }
   </style>
 </head>
 <body>
-  <section id="intro">
-    <div id="code-container"></div>
-    <div class="cursor"></div>
-  </section>
-
-  <section id="choiceSection">
-    <div class="line log">console.log(<span class="string">"Chọn kiểu web bạn muốn:"</span>);</div>
-    <div class="choice-container">
-      <div class="choice" id="option1">Xem mẫu có sẵn</div>
-      <div class="choice" id="option2">Tạo mẫu theo yêu cầu</div>
-    </div>
-    <div id="result"></div>
-  </section>
+  <div class="terminal" id="term">
+    <div class="line white">> <span class="green">const</span> message = <span class="blue">'Chào bạn!'</span>;</div>
+    <div class="line white">> <span class="green">let</span> topic = <span class="purple">'Lập trình web'</span>;</div>
+    <div class="line white">> console.log(<span class="red">'Cùng mình khám phá web này nhé!'</span>);</div>
+    <div class="line white">> <span class="green">link</span>: <a class="link" href="https://bemeonhomituot5-oss.github.io/Ch-c-c-Oanh-v-c-c-b-n-n-xin-p-c-a-l-p-9-5-ng-y-20-10-vui-v-nha-/" target="_blank">Mở trang dự án 💻</a></div>
+  </div>
 
   <script>
-    const codeLines = [
-      { text: "const dev = {", class: "keyword" },
-      { text: "  name: 'Trương Anh Hoàng Huy',", class: "string" },
-      { text: "  role: 'Web Developer 💻',", class: "string" },
-      { text: "  skills: ['HTML', 'CSS', 'JS', 'React'],", class: "string" },
-      { text: "};", class: "default" },
-      { text: "", class: "default" },
-      { text: "console.log('Xin chào, mình là Huy 👋');", class: "log" },
-      { text: "console.log('Mình tạo web mượt mà, gọn gàng và đẹp mắt ✨');", class: "log" },
-      { text: "console.log('Cùng nhau làm nên điều đặc biệt nha 💪');", class: "log" }
-    ];
-
-    const container = document.getElementById("code-container");
-
-    async function typeCode() {
-      for (const line of codeLines) {
-        const p = document.createElement("div");
-        p.classList.add("line", line.class);
-        container.appendChild(p);
-        for (let i = 0; i < line.text.length; i++) {
-          p.textContent += line.text[i];
-          await new Promise(res => setTimeout(res, 25 + Math.random() * 20));
-        }
-        await new Promise(res => setTimeout(res, 300));
-      }
-    }
-
-    typeCode();
-
-    const sections = document.querySelectorAll("section");
-    window.addEventListener("scroll", () => {
-      sections.forEach(sec => {
-        const rect = sec.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 100) {
-          sec.classList.add("visible");
-        }
-      });
+    const lines = document.querySelectorAll('.line');
+    lines.forEach((line, i) => {
+      setTimeout(() => line.classList.add('visible'), i * 800);
     });
-
-    document.getElementById("option1").onclick = () => {
-      document.getElementById("result").innerHTML = `
-        <div class="sample-box">
-          🌸 Chúc cô Oanh và những bông hoa xinh đẹp lớp 9/5 luôn rạng rỡ, hạnh phúc và đạt được mọi điều ước 20/10 này nhaa 💖✨
-        </div>`;
-    };
-
-    document.getElementById("option2").onclick = () => {
-      document.getElementById("result").innerHTML = `
-        <div class="contact-box">
-          Hãy liên hệ với mình để tạo mẫu theo yêu cầu nhé 💌<br>
-          Sau khi tạo tài khoản, bạn sẽ được chuyển đến Facebook của mình!
-        </div>`;
-    };
   </script>
 </body>
 </html>
+
