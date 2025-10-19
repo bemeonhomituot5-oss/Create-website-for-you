@@ -1,173 +1,292 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Giới thiệu bản thân - Mình & Bạn</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portfolio — Terminal Vibes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root{
+      --bg:#000;
+      --panel:#07181a;
+      --muted:#8bdadc;
+      --glass: rgba(255,255,255,0.03);
+      --line-height:1.5;
     }
-
-    body {
-      font-family: 'Fira Code', monospace;
-      background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
-      color: #00ffcc;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-      min-height: 100vh;
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);font-family:'Fira Code', monospace;color:#dffdf6}
+    .wrap{max-width:980px;margin:18px auto;padding:18px}
+    /* Terminal panel */
+    .terminal{
+      background: linear-gradient(180deg,#051216 0%, #08191b 100%);
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 12px 40px rgba(2,6,23,0.7);
+      border-radius:12px;
+      padding:18px;
+      min-height:60vh;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      overflow:hidden;
     }
-
-    section {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      text-align: center;
-      padding: 0 20px;
+    /* top bar */
+    .term-top{display:flex;gap:8px;align-items:center}
+    .dot{width:12px;height:12px;border-radius:50%}
+    .dot.r{background:#ff5f56}
+    .dot.y{background:#ffbd2e}
+    .dot.g{background:#27c93f}
+    .title{margin-left:8px;color:#7fdad0;font-size:0.95rem}
+    /* output area */
+    .out{flex:1;overflow:auto;padding:8px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);backdrop-filter: blur(2px)}
+    .line{white-space:pre-wrap;line-height:var(--line-height);word-break:break-word;font-size:16px}
+    .cursor{display:inline-block;width:10px;background:#00ff9d;margin-left:6px;height:1.1em;vertical-align:middle;animation:blink 1s steps(2,start) infinite}
+    @keyframes blink{50%{opacity:0}}
+    /* colors for text */
+    .c-green{color:#00ff66}
+    .c-blue{color:#66d9ff}
+    .c-red{color:#ff6b6b}
+    .c-white{color:#e8f8f4}
+    .c-purple{color:#b388ff}
+    /* controls area */
+    .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding-top:8px}
+    .cmd{
+      background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:10px 14px;border-radius:8px;cursor:pointer;
+      transition:all .18s ease;font-family:'Fira Code';
     }
-
-    h1, h2 {
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 1s ease;
-    }
-
-    p {
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 1s ease 0.3s;
-      max-width: 700px;
-      line-height: 1.6;
-    }
-
-    .show {
-      opacity: 1 !important;
-      transform: translateY(0) !important;
-    }
-
-    .choice {
-      margin-top: 40px;
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .btn {
-      background: rgba(0,255,204,0.1);
-      border: 1px solid #00ffcc;
-      color: #00ffcc;
-      padding: 12px 24px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .btn:hover {
-      background: #00ffcc;
-      color: #0f2027;
-    }
-
-    iframe {
-      width: 90%;
-      max-width: 420px;
-      height: 240px;
-      border: none;
-      border-radius: 10px;
-      margin-top: 30px;
-      box-shadow: 0 0 20px rgba(0,255,204,0.3);
-    }
-
-    .contact {
-      font-size: 1.1rem;
-      color: #baffff;
-      margin-top: 25px;
-    }
-
-    footer {
-      padding: 20px;
-      font-size: 0.8rem;
-      opacity: 0.6;
-      text-align: center;
-    }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 1.8rem; }
-      h2 { font-size: 1.4rem; }
-      p { font-size: 0.9rem; }
-      iframe { height: 200px; }
+    .cmd:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,255,200,0.06);border-color:rgba(255,255,255,0.12)}
+    .preview-frame{width:360px;max-width:100%;height:260px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+    /* form */
+    .form-wrap{display:flex;flex-direction:column;gap:10px;max-width:420px}
+    .form-input{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px;border-radius:8px;color:var(--muted);font-family:'Fira Code'}
+    .submit{background:#00ff9d;color:#001;border:none;padding:10px;border-radius:8px;cursor:pointer;font-weight:700}
+    .muted{color:#7aaeb0;font-size:0.9rem}
+    footer{color:#6fb7b3;text-align:center;margin-top:14px;font-size:0.9rem}
+    /* responsiveness */
+    @media (max-width:640px){
+      .wrap{padding:10px}
+      .title{font-size:0.88rem}
+      .line{font-size:15px}
+      .preview-frame{height:200px}
     }
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <div class="terminal" role="region" aria-label="Terminal portfolio">
+      <div class="term-top">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+        <div class="title">~/portfolio — Hoàng Huy</div>
+      </div>
 
-  <section id="intro">
-    <h1>Mình là lập trình viên web 💻</h1>
-    <p>Chào bạn, đây là nơi mình giới thiệu đôi chút về bản thân và công việc mình đang theo đuổi – lập trình web. Hãy cùng xem qua nhé!</p>
-  </section>
+      <div class="out" id="out" aria-live="polite">
+        <!-- lines injected by JS -->
+      </div>
 
-  <section id="options">
-    <h2>Bạn muốn làm gì?</h2>
-    <div class="choice">
-      <button class="btn" id="mauSan">Xem mẫu có sẵn</button>
-      <button class="btn" id="yeuCau">Tạo mẫu theo yêu cầu</button>
+      <div class="controls" id="controls">
+        <button class="cmd" id="btn-sample" title="Xem mẫu mini">▶ xem mẫu 20/10</button>
+        <button class="cmd" id="btn-custom" title="Tạo mẫu theo yêu cầu">✚ tạo theo yêu cầu</button>
+
+        <div style="flex:1"></div>
+
+        <!-- preview & form container -->
+        <div id="panel-right" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <iframe id="previewFrame" class="preview-frame hidden" srcdoc=""></iframe>
+
+          <div id="formPanel" class="form-wrap hidden" style="background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:10px;border-radius:8px;">
+            <input class="form-input" id="name" placeholder="Tên của bạn (ví dụ: Nguyễn A)" />
+            <input class="form-input" id="email" placeholder="Email liên hệ (tuỳ chọn)" />
+            <input class="form-input" id="fburl" placeholder="Facebook URL (để redirect sau khi tạo)" />
+            <button id="createBtn" class="submit">Tạo tài khoản</button>
+            <div id="thanks" class="muted" style="display:none">Cảm ơn bạn — đang chuyển hướng...</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="preview" style="display:none;">
-      <iframe srcdoc='
-        <!DOCTYPE html>
-        <html><head><style>
-        body {margin:0;overflow:hidden;background:linear-gradient(180deg,#ffd6e8,#ffeaf4);display:flex;justify-content:center;align-items:center;color:#ff4d88;font-family:"Dancing Script",cursive;}
-        .text-box{background:rgba(255,255,255,0.5);padding:15px;border-radius:20px;box-shadow:0 0 10px rgba(255,150,200,0.4);}
-        </style></head>
-        <body><div class="text-box">🌸 Chúc cô Oanh và những bông hoa xinh đẹp lớp 9/5 luôn rạng rỡ 🌷✨</div></body></html>'>
-      </iframe>
-    </div>
-
-    <div id="contact" style="display:none;">
-      <p class="contact">Liên hệ với mình qua Facebook để tạo mẫu riêng nha 💬</p>
-      <a href="https://facebook.com" target="_blank" class="btn">Đến Facebook của mình</a>
-    </div>
-  </section>
-
-  <footer>© 2025 - Huy cá chép | Web coder vibes ⚡</footer>
+    <footer>Giao tiếp trong web dùng xưng hô: <strong>mình</strong> và <strong>bạn</strong> • © 2025</footer>
+  </div>
 
   <script>
-    // hiệu ứng khi cuộn
-    const sections = document.querySelectorAll('section');
-    window.addEventListener('scroll', () => {
-      sections.forEach(sec => {
-        const rect = sec.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 100) {
-          sec.querySelectorAll('h1, h2, p').forEach(el => el.classList.add('show'));
+    // ---------- data lines (terminal logs) ----------
+    const lines = [
+      "Initializing portfolio...",
+      "Loading modules: [HTML] [CSS] [JS] [React? maybe later]",
+      "Mình là Hoàng Huy — lập trình viên web.",
+      "Mình giúp bạn làm: portfolio, landing page, cửa hàng nhỏ, tích hợp form, và hơn thế nữa.",
+      "Kỹ năng: HTML • CSS • JavaScript • React • TailwindCSS • GitHub",
+      "Sẵn sàng bắt đầu? Chọn một tùy chọn phía dưới.",
+    ];
+
+    // colors pool
+    const colorClasses = ['c-green','c-blue','c-red','c-white','c-purple'];
+
+    // helpers
+    function randColorClass() {
+      return colorClasses[Math.floor(Math.random()*colorClasses.length)];
+    }
+
+    // print lines one by one, per-char typing, then show cursor
+    const out = document.getElementById('out');
+
+    // ensure out is cleared
+    out.innerHTML = '';
+
+    // function to create a line element
+    function makeLine(text, cls) {
+      const div = document.createElement('div');
+      div.className = 'line ' + (cls||'');
+      return div;
+    }
+
+    // Print lines sequence function
+    async function printLines(linesArr) {
+      for (let i=0;i<linesArr.length;i++){
+        const text = linesArr[i];
+        const color = randColorClass();
+        const lineEl = makeLine('', color);
+        out.appendChild(lineEl);
+        await typeText(lineEl, text, 12 + Math.floor(Math.random()*20)); // speed variable
+        // small pause after line
+        await sleep(250 + Math.random()*300);
+        // scroll to bottom smoothly
+        out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+      }
+      // final cursor line
+      const prompt = makeLine('');
+      prompt.innerHTML = `<span class="${randColorClass()}">~$</span> <span class="${randColorClass()}">ready</span> <span class="cursor" aria-hidden="true"></span>`;
+      out.appendChild(prompt);
+      out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+    }
+
+    function typeText(el, text, delay) {
+      return new Promise(resolve=>{
+        let i=0;
+        const c = document.createElement('span');
+        el.appendChild(c);
+        const cur = document.createElement('span');
+        cur.className = 'cursor';
+        el.appendChild(cur);
+        function step(){
+          if (i<text.length){
+            const ch = text[i++];
+            const span = document.createElement('span');
+            span.textContent = ch;
+            // random color per chunk (for variety inside line)
+            span.className = (Math.random() < 0.08) ? randColorClass() : '';
+            // append before cursor
+            el.insertBefore(span, cur);
+            // small jitter: occasionally pause longer
+            let dt = delay;
+            if (ch === ' ' && Math.random() < 0.08) dt += 60;
+            if (Math.random() < 0.02) dt += 80;
+            setTimeout(step, dt);
+            // keep scroll
+            out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+          } else {
+            // remove cursor in this line
+            if (cur.parentNode) cur.remove();
+            resolve();
+          }
         }
+        step();
       });
+    }
+
+    function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+    // start printing after small delay
+    setTimeout(()=>{ printLines(lines); }, 400);
+
+    // ---------- controls: sample and custom ----------
+    const btnSample = document.getElementById('btn-sample');
+    const btnCustom = document.getElementById('btn-custom');
+    const previewFrame = document.getElementById('previewFrame');
+    const formPanel = document.getElementById('formPanel');
+    const createBtn = document.getElementById('createBtn');
+    const thanks = document.getElementById('thanks');
+
+    // sample srcdoc (mini demo) - using the user's provided 20/10 content (simplified for iframe)
+    const sampleDoc = `<!doctype html>
+    <html><head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <style>
+      html,body{height:100%;margin:0;background:linear-gradient(180deg,#ffd6e8,#ffeaf4);font-family:'Dancing Script',cursive;display:flex;align-items:center;justify-content:center}
+      .card{background:rgba(255,255,255,0.6);padding:18px;border-radius:12px;max-width:480px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.08)}
+      h1{color:#ff4d88;margin:0 0 8px;font-size:18px}
+      p{margin:0;color:#ff80ab;font-size:14px}
+    </style>
+    </head>
+    <body>
+      <div class="card">
+        <h1>🌸 Chúc mừng 20/10 🌸</h1>
+        <p>Chúc cô Oanh và những bông hoa lớp 9/5 luôn rạng rỡ và hạnh phúc!</p>
+      </div>
+    </body></html>`;
+
+    btnSample.addEventListener('click',()=>{
+      // show iframe preview
+      previewFrame.srcdoc = sampleDoc;
+      previewFrame.classList.remove('hidden');
+      formPanel.classList.add('hidden');
+      // print a short line in terminal
+      const l = makeLine('', randColorClass());
+      out.appendChild(l);
+      typeText(l, 'Opening sample preview...', 8);
+      out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
     });
 
-    // Nút chọn
-    const mauSan = document.getElementById('mauSan');
-    const yeuCau = document.getElementById('yeuCau');
-    const preview = document.getElementById('preview');
-    const contact = document.getElementById('contact');
+    btnCustom.addEventListener('click',()=>{
+      formPanel.classList.toggle('hidden');
+      previewFrame.classList.add('hidden');
+      // log
+      const l = makeLine('', randColorClass());
+      out.appendChild(l);
+      typeText(l, 'Preparing custom form... (fill and create)', 10);
+      out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+    });
 
-    mauSan.onclick = () => {
-      preview.style.display = 'block';
-      contact.style.display = 'none';
-      window.scrollTo({ top: preview.offsetTop, behavior: 'smooth' });
-    };
+    // create action: show thanks and redirect to FB
+    createBtn.addEventListener('click', async ()=>{
+      const name = document.getElementById('name').value.trim() || 'bạn';
+      const fb = document.getElementById('fburl').value.trim();
+      // log in terminal
+      const l = makeLine('', randColorClass());
+      out.appendChild(l);
+      await typeText(l, `Creating account for ${name}...`, 10);
+      await sleep(300);
+      thanks.style.display = 'block';
+      // small terminal log
+      const l2 = makeLine('', randColorClass());
+      out.appendChild(l2);
+      await typeText(l2, 'Done. Redirecting to Facebook in 2s...', 10);
+      out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+      setTimeout(()=>{
+        // redirect: if fb provided, use it; else default to facebook.com
+        const target = fb && fb.length>5 ? fb : 'https://facebook.com';
+        window.open(target, '_blank');
+      }, 1800);
+    });
 
-    yeuCau.onclick = () => {
-      contact.style.display = 'block';
-      preview.style.display = 'none';
-      window.scrollTo({ top: contact.offsetTop, behavior: 'smooth' });
-    };
+    // make sure keyboard doesn't accidentally scroll content when focused
+    document.addEventListener('keydown', (e)=>{
+      if (e.key === 'Tab') e.preventDefault();
+    });
+
+    // accessibility: allow clicking any blank area of terminal to focus scroll
+    document.querySelector('.terminal').addEventListener('click', ()=> out.focus());
+
+    // initial small welcome beep-style log (non-audio)
+    (async function extraIntro(){
+      await sleep(6000);
+      const l = makeLine('', 'c-blue');
+      out.appendChild(l);
+      await typeText(l,'Tip: nhấn "xem mẫu 20/10" để preview hoặc "tạo theo yêu cầu" để gửi thông tin.',12);
+      out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+    })();
   </script>
-
 </body>
 </html>
+
