@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giới thiệu bản thân - yuH Dev</title>
+  <title>yuH Dev - Terminal Web</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap');
 
@@ -43,6 +43,7 @@
     .choice-section {
       background: #0d0d0d;
       color: #fff;
+      padding: 50px 20px;
     }
 
     .btn {
@@ -78,19 +79,54 @@
       50.01%, 100% { opacity: 0; }
     }
 
+    .hidden {
+      display: none;
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 600px;
+      height: 340px;
+      border: 2px solid #00ff9d;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .price-section {
+      margin-top: 20px;
+      padding: 20px;
+      border: 2px solid #00ff9d;
+      border-radius: 10px;
+      max-width: 500px;
+      font-size: 1.1rem;
+      background: #111;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px 0;
+      margin-top: 50px;
+      border-top: 1px solid #00ff9d;
+      color: #00ff9d;
+      font-size: 0.9rem;
+    }
+
     @media (max-width: 768px) {
       .intro-line { font-size: 0.95rem; }
       .btn { font-size: 0.9rem; padding: 10px 20px; }
+      iframe { height: 200px; }
     }
   </style>
 </head>
 <body>
+  <!-- Terminal Intro -->
   <section id="intro">
     <div id="introText"></div>
     <div class="cursor"></div>
   </section>
 
-  <section class="choice-section">
+  <!-- Lựa chọn -->
+  <section class="choice-section hidden" id="choiceSection">
     <h2 style="color:#00ff9d; font-size:1.4rem;">Chọn cách bạn muốn tạo trang web</h2>
     <div>
       <button class="btn" id="choice1">Lựa chọn 1: Dùng mẫu có sẵn</button>
@@ -98,8 +134,28 @@
     </div>
   </section>
 
+  <!-- Video mẫu (sẽ hiển thị sau khi chọn 1) -->
+  <section class="hidden" id="videoSection">
+    <h3 style="color:#00ff9d;">Đây là mẫu web 20/10 của mình</h3>
+    <iframe src="https://bemeonhomituot5-oss.github.io/Ch-c-c-Oanh-v-c-c-b-n-n-xin-p-c-a-l-p-9-5-ng-y-20-10-vui-v-nha-/" frameborder="0"></iframe>
+    <button class="btn" id="nextBtn">Tiếp theo</button>
+  </section>
+
+  <!-- Giá tiền + FB -->
+  <section class="hidden" id="priceSection">
+    <div class="price-section">
+      💻 Dự án web nhỏ giá: 50.000₫<br>
+      📱 Liên hệ: <a href="https://www.facebook.com/huy.tim.cuc.tay/" target="_blank" style="color:#00ff9d;">https://www.facebook.com/huy.tim.cuc.tay/</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    © Trương Anh Hoàng Huy 2025
+  </footer>
+
   <script>
-    // Hiệu ứng đánh máy giới thiệu bản thân
+    // Terminal intro
     const introLines = [
       "> Xin chào bạn 👋",
       "> Mình là Hoàng Huy — hay còn gọi là yuH 💻",
@@ -124,19 +180,28 @@
           charIndex = 0;
           setTimeout(typeLine, 500);
         }
+      } else {
+        document.getElementById("choiceSection").classList.remove("hidden");
       }
     }
 
     window.onload = typeLine;
 
-    // Khi nhấn Lựa chọn 1 => chuyển sang web mẫu
+    // Lựa chọn 1
     document.getElementById("choice1").addEventListener("click", () => {
-      window.location.href = "https://bemeonhomituot5-oss.github.io/Ch-c-c-Oanh-v-c-c-b-n-n-xin-p-c-a-l-p-9-5-ng-y-20-10-vui-v-nha-/";
+      document.getElementById("choiceSection").classList.add("hidden");
+      document.getElementById("videoSection").classList.remove("hidden");
     });
 
-    // Khi nhấn Lựa chọn 2 => hiển thị thông tin liên hệ (sẽ thêm sau)
+    // Nút Tiếp theo trong lựa chọn 1
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      document.getElementById("videoSection").classList.add("hidden");
+      document.getElementById("priceSection").classList.remove("hidden");
+    });
+
+    // Lựa chọn 2 -> thẳng FB
     document.getElementById("choice2").addEventListener("click", () => {
-      alert("Phần tạo mẫu theo yêu cầu sẽ được thêm sau nhoa 😁");
+      window.open("https://www.facebook.com/huy.tim.cuc.tay/", "_blank");
     });
   </script>
 </body>
