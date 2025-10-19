@@ -3,97 +3,164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mình & Bạn — Trang Web Lập Trình</title>
+  <title>Bảng lựa chọn | Code Style</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+
     body {
       margin: 0;
-      background-color: #0d0d0d;
-      color: #e6e6e6;
+      padding: 0;
+      background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
       font-family: 'Fira Code', monospace;
-      overflow-x: hidden;
-      height: 100vh;
+      color: #e0e0e0;
       display: flex;
-      align-items: center;
       justify-content: center;
-      flex-direction: column;
-      transition: all 0.4s ease;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    .terminal {
-      background: rgba(0, 0, 0, 0.85);
-      border: 2px solid #00ff9d;
+    .container {
+      text-align: left;
+      background: rgba(15, 15, 15, 0.9);
+      border: 1px solid #333;
       border-radius: 12px;
       padding: 25px;
+      box-shadow: 0 0 20px rgba(0,255,150,0.15);
       width: 90%;
-      max-width: 700px;
-      min-height: 320px;
-      box-shadow: 0 0 20px #00ffaa55;
-      overflow: hidden;
-      animation: fadeIn 1s ease-out;
+      max-width: 420px;
+      animation: fadeIn 1s ease-in-out;
     }
 
-    .line {
-      line-height: 1.6;
-      overflow: hidden;
-      white-space: nowrap;
-      animation: typing 3s steps(40) 1s forwards;
-      opacity: 0;
+    h1 {
+      color: #00ff99;
+      font-size: 22px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 6px #00ff99;
+      animation: glow 2s infinite alternate;
     }
 
-    .line.visible {
-      opacity: 1;
+    .choice {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      color: #fff;
     }
 
-    .green { color: #00ff9d; }
-    .blue { color: #00b3ff; }
-    .red { color: #ff4d4d; }
-    .purple { color: #c38aff; }
-    .white { color: #ffffff; }
+    .choice:hover {
+      background: rgba(0,255,150,0.2);
+      transform: translateX(6px);
+    }
+
+    .code-color-red { color: #ff4d4d; }
+    .code-color-blue { color: #4db8ff; }
+    .code-color-green { color: #00ff99; }
+    .code-color-yellow { color: #ffdd57; }
+    .code-color-purple { color: #c774ff; }
+    .code-color-white { color: #e0e0e0; }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      background-color: #00ff99;
+      margin-left: 3px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #00ff99; }
+      to { text-shadow: 0 0 15px #00ff99; }
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; opacity: 1; }
+    /* Hiệu ứng chấm sáng */
+    .bg-dot {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: rgba(0,255,150,0.2);
+      border-radius: 50%;
+      animation: moveDot 8s linear infinite;
     }
 
-    .link {
-      display: inline-block;
-      margin-top: 20px;
-      text-decoration: none;
-      color: #00b3ff;
-      border-bottom: 1px dashed #00b3ff;
-      transition: all 0.3s ease;
+    @keyframes moveDot {
+      from { transform: translateY(0) translateX(0); opacity: 1; }
+      to { transform: translateY(-100vh) translateX(30vw); opacity: 0; }
     }
 
-    .link:hover {
-      color: #00ff9d;
-      border-color: #00ff9d;
-    }
-
-    @media (max-width: 600px) {
-      .terminal { font-size: 14px; padding: 15px; }
+    footer {
+      position: fixed;
+      bottom: 10px;
+      right: 15px;
+      font-size: 11px;
+      color: #666;
+      opacity: 0.7;
+      font-family: 'Fira Code', monospace;
     }
   </style>
 </head>
 <body>
-  <div class="terminal" id="term">
-    <div class="line white">> <span class="green">const</span> message = <span class="blue">'Chào bạn!'</span>;</div>
-    <div class="line white">> <span class="green">let</span> topic = <span class="purple">'Lập trình web'</span>;</div>
-    <div class="line white">> console.log(<span class="red">'Cùng mình khám phá web này nhé!'</span>);</div>
-    <div class="line white">> <span class="green">link</span>: <a class="link" href="https://bemeonhomituot5-oss.github.io/Ch-c-c-Oanh-v-c-c-b-n-n-xin-p-c-a-l-p-9-5-ng-y-20-10-vui-v-nha-/" target="_blank">Mở trang dự án 💻</a></div>
+  <div class="container">
+    <h1>~/Terminal_Selection<span class="cursor"></span></h1>
+    <div class="choice" id="choice1">
+      <span class="code-color-green">[1]</span> 
+      <span class="code-color-white"> Mẫu web chúc mừng </span> 
+      <span class="code-color-blue">→ bấm để xem</span>
+    </div>
+    <div class="choice" id="choice2">
+      <span class="code-color-green">[2]</span> 
+      <span class="code-color-white"> Trang code test khác</span> 
+      <span class="code-color-yellow"> (đang cập nhật)</span>
+    </div>
+    <div class="choice" id="choice3">
+      <span class="code-color-green">[3]</span> 
+      <span class="code-color-white"> Thoát </span>
+      <span class="code-color-red">(exit)</span>
+    </div>
   </div>
 
+  <footer>Made by the boys of class 9/5</footer>
+
   <script>
-    const lines = document.querySelectorAll('.line');
-    lines.forEach((line, i) => {
-      setTimeout(() => line.classList.add('visible'), i * 800);
+    // Khi click vào lựa chọn 1
+    document.getElementById("choice1").addEventListener("click", () => {
+      window.location.href = "https://bemeonhomituot5-oss.github.io/Ch-c-c-Oanh-v-c-c-b-n-n-xin-p-c-a-l-p-9-5-ng-y-20-10-vui-v-nha-/";
     });
+
+    // Các lựa chọn khác (hiện chưa có link)
+    document.getElementById("choice2").addEventListener("click", () => {
+      alert("Trang này đang được cập nhật nha 😎");
+    });
+
+    document.getElementById("choice3").addEventListener("click", () => {
+      alert("Đã thoát chương trình!");
+    });
+
+    // Hiệu ứng dot bay
+    for (let i = 0; i < 30; i++) {
+      const dot = document.createElement('div');
+      dot.classList.add('bg-dot');
+      dot.style.left = Math.random() * 100 + 'vw';
+      dot.style.top = Math.random() * 100 + 'vh';
+      dot.style.animationDelay = Math.random() * 8 + 's';
+      document.body.appendChild(dot);
+    }
   </script>
 </body>
 </html>
+
 
