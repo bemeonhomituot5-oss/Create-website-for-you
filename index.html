@@ -3,127 +3,170 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Giới thiệu bản thân - Coder Vibes</title>
+  <title>Giới thiệu bản thân - Mình & Bạn</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      scroll-behavior: smooth;
     }
+
     body {
       font-family: 'Fira Code', monospace;
-      background: radial-gradient(circle at top left, #0a0a0f, #000);
+      background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
       color: #00ffcc;
       overflow-x: hidden;
-    }
-    section {
+      scroll-behavior: smooth;
       min-height: 100vh;
+    }
+
+    section {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 40px 20px;
+      min-height: 100vh;
       text-align: center;
+      padding: 0 20px;
+    }
+
+    h1, h2 {
       opacity: 0;
       transform: translateY(50px);
-      transition: all 1.2s ease;
+      transition: all 1s ease;
     }
-    section.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-      color: #00e6b8;
-      text-shadow: 0 0 10px #00ffcc;
-    }
+
     p {
-      font-size: 1.2rem;
-      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 1s ease 0.3s;
       max-width: 700px;
+      line-height: 1.6;
     }
-    .btn-group {
+
+    .show {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    .choice {
       margin-top: 40px;
       display: flex;
+      gap: 20px;
       flex-wrap: wrap;
-      gap: 15px;
       justify-content: center;
     }
-    button {
-      background: #001f1f;
-      color: #00ffcc;
+
+    .btn {
+      background: rgba(0,255,204,0.1);
       border: 1px solid #00ffcc;
-      padding: 12px 20px;
-      font-size: 1rem;
+      color: #00ffcc;
+      padding: 12px 24px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: 0.3s;
-      border-radius: 6px;
+      transition: all 0.3s ease;
     }
-    button:hover {
+
+    .btn:hover {
       background: #00ffcc;
-      color: #000;
-      box-shadow: 0 0 20px #00ffcc;
+      color: #0f2027;
     }
+
+    iframe {
+      width: 90%;
+      max-width: 420px;
+      height: 240px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 30px;
+      box-shadow: 0 0 20px rgba(0,255,204,0.3);
+    }
+
+    .contact {
+      font-size: 1.1rem;
+      color: #baffff;
+      margin-top: 25px;
+    }
+
     footer {
-      margin-top: 50px;
-      font-size: 0.9rem;
-      opacity: 0.7;
+      padding: 20px;
+      font-size: 0.8rem;
+      opacity: 0.6;
+      text-align: center;
     }
-    @media (max-width: 768px) {
-      h1 { font-size: 2rem; }
-      p { font-size: 1rem; }
-      button { width: 80%; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.4rem; }
+      p { font-size: 0.9rem; }
+      iframe { height: 200px; }
     }
   </style>
 </head>
 <body>
 
-  <section>
-    <h1>Xin chào, mình là Huy 👋</h1>
-    <p>Mình là một lập trình viên đam mê sáng tạo web — nơi mà từng dòng code trở thành câu chuyện. Hãy cùng mình khám phá nhé!</p>
+  <section id="intro">
+    <h1>Mình là lập trình viên web 💻</h1>
+    <p>Chào bạn, đây là nơi mình giới thiệu đôi chút về bản thân và công việc mình đang theo đuổi – lập trình web. Hãy cùng xem qua nhé!</p>
   </section>
 
-  <section>
-    <h1>✨ Kỹ năng & Đam mê</h1>
-    <p>Mình yêu thích lập trình web, đặc biệt là tạo ra giao diện mượt mà, sáng tạo và có tính tương tác cao. HTML, CSS, JS chính là công cụ kể chuyện của mình.</p>
-  </section>
+  <section id="options">
+    <h2>Bạn muốn làm gì?</h2>
+    <div class="choice">
+      <button class="btn" id="mauSan">Xem mẫu có sẵn</button>
+      <button class="btn" id="yeuCau">Tạo mẫu theo yêu cầu</button>
+    </div>
 
-  <section>
-    <h1>🚀 Cùng bắt đầu</h1>
-    <p>Bạn có thể chọn theo mẫu có sẵn hoặc tạo một mẫu riêng của mình.</p>
-    <div class="btn-group">
-      <button onclick="goMauSan()">Theo mẫu có sẵn</button>
-      <button onclick="goTaoMau()">Tạo theo yêu cầu</button>
+    <div id="preview" style="display:none;">
+      <iframe srcdoc='
+        <!DOCTYPE html>
+        <html><head><style>
+        body {margin:0;overflow:hidden;background:linear-gradient(180deg,#ffd6e8,#ffeaf4);display:flex;justify-content:center;align-items:center;color:#ff4d88;font-family:"Dancing Script",cursive;}
+        .text-box{background:rgba(255,255,255,0.5);padding:15px;border-radius:20px;box-shadow:0 0 10px rgba(255,150,200,0.4);}
+        </style></head>
+        <body><div class="text-box">🌸 Chúc cô Oanh và những bông hoa xinh đẹp lớp 9/5 luôn rạng rỡ 🌷✨</div></body></html>'>
+      </iframe>
+    </div>
+
+    <div id="contact" style="display:none;">
+      <p class="contact">Liên hệ với mình qua Facebook để tạo mẫu riêng nha 💬</p>
+      <a href="https://facebook.com" target="_blank" class="btn">Đến Facebook của mình</a>
     </div>
   </section>
 
-  <footer>
-    <p>© 2025 - Được làm bởi Huy (mình) và bạn 💻</p>
-  </footer>
+  <footer>© 2025 - Mình & Bạn | Web coder vibes ⚡</footer>
 
   <script>
-    // Hiệu ứng hiện dần khi cuộn
-    const sections = document.querySelectorAll("section");
-    window.addEventListener("scroll", () => {
-      const triggerBottom = window.innerHeight * 0.8;
+    // hiệu ứng khi cuộn
+    const sections = document.querySelectorAll('section');
+    window.addEventListener('scroll', () => {
       sections.forEach(sec => {
-        const rect = sec.getBoundingClientRect().top;
-        if (rect < triggerBottom) sec.classList.add("show");
+        const rect = sec.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100) {
+          sec.querySelectorAll('h1, h2, p').forEach(el => el.classList.add('show'));
+        }
       });
     });
 
-    function goMauSan() {
-      window.location.href = "https://your-sample-page-link.com"; // Thay bằng link mẫu 20/10 của mày
-    }
+    // Nút chọn
+    const mauSan = document.getElementById('mauSan');
+    const yeuCau = document.getElementById('yeuCau');
+    const preview = document.getElementById('preview');
+    const contact = document.getElementById('contact');
 
-    function goTaoMau() {
-      alert("Tính năng tạo mẫu theo yêu cầu đang cập nhật. Sau khi tạo tài khoản, bạn sẽ được dẫn đến Facebook của mình 💚");
-      setTimeout(() => {
-        window.location.href = "https://www.facebook.com/"; // Thay bằng link fb của mày
-      }, 2000);
-    }
+    mauSan.onclick = () => {
+      preview.style.display = 'block';
+      contact.style.display = 'none';
+      window.scrollTo({ top: preview.offsetTop, behavior: 'smooth' });
+    };
+
+    yeuCau.onclick = () => {
+      contact.style.display = 'block';
+      preview.style.display = 'none';
+      window.scrollTo({ top: contact.offsetTop, behavior: 'smooth' });
+    };
   </script>
 
 </body>
