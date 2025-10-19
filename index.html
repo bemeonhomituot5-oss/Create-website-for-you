@@ -1,150 +1,96 @@
-npm create vite@latest my-portfolio
-cd my-portfolio
-npm install
-npm install framer-motion tailwindcss
-npm run dev
-
 import { motion } from "framer-motion";
-import { useState } from "react";
 
 export default function App() {
-  const [showForm, setShowForm] = useState(false);
-  const [showSample, setShowSample] = useState(false);
-  const [thanks, setThanks] = useState(false);
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setThanks(true);
-    setTimeout(() => {
-      window.location.href = "https://facebook.com"; // đổi sang fb của mày sau nhoa
-    }, 2000);
-  };
-
   return (
-    <div className="bg-[#0a0f1a] text-white min-h-screen font-mono overflow-x-hidden">
-      {/* Hero Section */}
-      <section className="h-screen flex flex-col justify-center items-center text-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white overflow-x-hidden">
+      {/* Phần giới thiệu */}
+      <section className="flex flex-col items-center justify-center min-h-screen text-center px-6">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-4xl md:text-6xl font-bold"
+          className="text-5xl font-bold mb-6"
         >
-          Xin chào, mình là Huy 👋
+          Chào bạn, mình là <span className="text-cyan-400">Hoàng Huy</span> 💻
         </motion.h1>
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="mt-4 text-lg md:text-2xl text-gray-300"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 1 }}
+          className="text-lg text-gray-300 max-w-xl"
         >
-          Một lập trình viên web yêu thích sáng tạo và công nghệ 💻
+          Mình là một lập trình viên web tương lai, thích tạo ra những trang web đẹp, mượt mà và sáng tạo.
         </motion.p>
       </section>
 
-      {/* About Section */}
-      <motion.section
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="min-h-[70vh] flex flex-col justify-center items-center px-6"
-      >
-        <h2 className="text-3xl font-bold mb-4 text-blue-400">Về mình</h2>
-        <p className="max-w-2xl text-center text-gray-300">
-          Mình thích xây dựng các trang web đơn giản, hiệu ứng mượt và tối ưu trải nghiệm người dùng.
-          Mục tiêu của mình là giúp nhiều người có thể sở hữu website riêng thật đẹp và chuyên nghiệp.
-        </p>
-      </motion.section>
+      {/* Hiệu ứng lướt xuống hiện ra từng dòng */}
+      <section className="min-h-screen flex flex-col items-center justify-center gap-10 px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          className="bg-gray-800/50 p-8 rounded-2xl shadow-xl backdrop-blur-lg max-w-2xl"
+        >
+          <h2 className="text-3xl font-semibold mb-4 text-cyan-300">Giới thiệu bản thân</h2>
+          <p className="text-gray-300 leading-relaxed">
+            Mình đang học và phát triển kỹ năng lập trình web. Mục tiêu của mình là làm những website vừa đẹp vừa tiện ích cho mọi người.
+          </p>
+        </motion.div>
 
-      {/* Skills Section */}
-      <motion.section
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="min-h-[70vh] flex flex-col justify-center items-center px-6 bg-[#0e1525]"
-      >
-        <h2 className="text-3xl font-bold mb-4 text-purple-400">Kỹ năng</h2>
-        <p className="max-w-2xl text-center text-gray-300">
-          HTML • CSS • JavaScript • React • TailwindCSS • GitHub
-        </p>
-      </motion.section>
-
-      {/* Options Section */}
-      <motion.section
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="min-h-[80vh] flex flex-col justify-center items-center px-6"
-      >
-        <h2 className="text-3xl font-bold mb-8 text-green-400">Lựa chọn của bạn</h2>
-        <div className="flex flex-col md:flex-row gap-6">
+        {/* Hai lựa chọn */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 1 }}
+          className="flex flex-col sm:flex-row gap-6"
+        >
           <button
-            onClick={() => setShowSample(true)}
-            className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-2xl transition-all"
+            onClick={() => alert('Hiển thị mẫu 20/10 nè 🎉')}
+            className="bg-cyan-500 hover:bg-cyan-400 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300"
           >
             Theo mẫu có sẵn
           </button>
           <button
-            onClick={() => setShowForm(true)}
-            className="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-2xl transition-all"
+            onClick={() => alert('Thông tin liên hệ (sẽ thêm sau) 📞')}
+            className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300"
           >
             Tạo mẫu theo yêu cầu
           </button>
-        </div>
-
-        {showSample && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-10 p-6 rounded-xl bg-[#101828] w-full max-w-2xl text-center"
-          >
-            <h3 className="text-xl mb-4 text-blue-400">Mẫu có sẵn (20/10)</h3>
-            <iframe
-              src="https://example.com/mau-20-10" // đổi sang link thật của mẫu đó sau
-              className="w-full h-96 rounded-lg border border-gray-700"
-            ></iframe>
-          </motion.div>
-        )}
-
-        {showForm && (
-          <motion.form
-            onSubmit={handleFormSubmit}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-10 bg-[#101828] p-6 rounded-xl w-full max-w-md"
-          >
-            <h3 className="text-xl mb-4 text-purple-400">Tạo mẫu theo yêu cầu</h3>
-            <input
-              type="text"
-              placeholder="Tên của bạn"
-              className="w-full mb-3 p-2 rounded bg-[#1b2335] border border-gray-700 text-white"
-              required
-            />
-            <input
-              type="email"
-              placeholder="Email liên hệ"
-              className="w-full mb-3 p-2 rounded bg-[#1b2335] border border-gray-700 text-white"
-              required
-            />
-            <button
-              type="submit"
-              className="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded transition-all"
-            >
-              Tạo tài khoản
-            </button>
-            {thanks && <p className="mt-4 text-green-400">Cảm ơn bạn đã tin tưởng 💖</p>}
-          </motion.form>
-        )}
-      </motion.section>
+        </motion.div>
+      </section>
 
       {/* Footer */}
-      <footer className="text-center py-8 text-gray-500 text-sm">
-        © 2025 Mình là Huy - Lập trình viên web. All rights reserved.
+      <footer className="py-10 text-center text-gray-400">
+        <p>© 2025 Hoàng Huy. Cảm ơn bạn đã ghé thăm 💖</p>
       </footer>
     </div>
   );
 }
 
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  scroll-behavior: smooth;
+}
+
+
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
