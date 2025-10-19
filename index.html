@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Giới thiệu bản thân - Terminal Mode</title>
+  <title>Giới thiệu bản thân - Dev Terminal</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
 
@@ -26,12 +26,13 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       opacity: 0;
       transform: translateY(40px);
-      transition: all 1s ease;
-      text-align: center;
-      padding: 40px 15px;
+      transition: all 1.2s ease;
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: auto;
     }
 
     section.visible {
@@ -39,16 +40,18 @@
       transform: translateY(0);
     }
 
-    h1, h2, p {
-      margin: 10px 0;
+    .line {
+      width: 100%;
+      font-size: 1.1rem;
+      margin: 4px 0;
       white-space: pre-wrap;
-      word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     .cursor {
       display: inline-block;
       width: 10px;
-      background-color: #fff;
+      background-color: #00ff99;
       animation: blink 0.8s infinite;
     }
 
@@ -56,6 +59,12 @@
       0%, 50% { opacity: 1; }
       51%, 100% { opacity: 0; }
     }
+
+    .keyword { color: #00ccff; }
+    .string { color: #cc99ff; }
+    .log { color: #00ff99; }
+    .error { color: #ff5555; }
+    .default { color: #fff; }
 
     .choice-container {
       display: flex;
@@ -65,10 +74,10 @@
     }
 
     .choice {
-      background-color: #111;
-      border: 1px solid #444;
-      color: #fff;
-      padding: 12px 20px;
+      background-color: #0f0f0f;
+      border: 1px solid #333;
+      color: #00ff99;
+      padding: 10px 18px;
       border-radius: 8px;
       cursor: pointer;
       transition: 0.3s;
@@ -82,14 +91,13 @@
 
     .sample-box {
       margin-top: 20px;
-      border: 1px solid #333;
+      border: 1px solid #222;
       border-radius: 10px;
       padding: 15px;
       background: #0a0a0a;
-      font-size: 13px;
-      text-align: left;
-      max-width: 350px;
+      font-size: 14px;
       color: #ffb6c1;
+      text-align: left;
     }
 
     .contact-box {
@@ -99,22 +107,19 @@
     }
 
     @media (max-width: 600px) {
-      h1 { font-size: 20px; }
-      h2 { font-size: 16px; }
-      .choice { padding: 10px 16px; font-size: 14px; }
+      .line { font-size: 0.95rem; }
+      .choice { padding: 8px 14px; font-size: 14px; }
     }
   </style>
 </head>
 <body>
   <section id="intro">
-    <h1 id="line1"></h1>
-    <h2 id="line2"></h2>
-    <p id="line3"></p>
+    <div id="code-container"></div>
     <div class="cursor"></div>
   </section>
 
   <section id="choiceSection">
-    <h2>Chọn kiểu web bạn muốn</h2>
+    <div class="line log">console.log(<span class="string">"Chọn kiểu web bạn muốn:"</span>);</div>
     <div class="choice-container">
       <div class="choice" id="option1">Xem mẫu có sẵn</div>
       <div class="choice" id="option2">Tạo mẫu theo yêu cầu</div>
@@ -123,50 +128,35 @@
   </section>
 
   <script>
-    // Từng dòng giới thiệu
-    const lines = [
-      "Xin chào, mình là một lập trình viên web 👨‍💻",
-      "Mình tạo ra những trang web mượt mà và sáng tạo 💡",
-      "Cùng mình khám phá thế giới lập trình nha ⚡"
+    const codeLines = [
+      { text: "const dev = {", class: "keyword" },
+      { text: "  name: 'Trương Anh Hoàng Huy',", class: "string" },
+      { text: "  role: 'Web Developer 💻',", class: "string" },
+      { text: "  skills: ['HTML', 'CSS', 'JS', 'React'],", class: "string" },
+      { text: "};", class: "default" },
+      { text: "", class: "default" },
+      { text: "console.log('Xin chào, mình là Huy 👋');", class: "log" },
+      { text: "console.log('Mình tạo web mượt mà, gọn gàng và đẹp mắt ✨');", class: "log" },
+      { text: "console.log('Cùng nhau làm nên điều đặc biệt nha 💪');", class: "log" }
     ];
 
-    const colors = ["#fff", "#00ff99", "#00ccff", "#ff6666", "#cc99ff"];
-    const weights = [0.5, 0.2, 0.1, 0.1, 0.1]; // trắng chiếm 50%
+    const container = document.getElementById("code-container");
 
-    function weightedColor() {
-      let sum = 0, rand = Math.random();
-      for (let i = 0; i < weights.length; i++) {
-        sum += weights[i];
-        if (rand <= sum) return colors[i];
-      }
-      return colors[0];
-    }
-
-    async function typeLine(element, text) {
-      for (let i = 0; i < text.length; i++) {
-        const span = document.createElement("span");
-        span.textContent = text[i];
-        span.style.color = weightedColor();
-        element.appendChild(span);
-        await new Promise(res => setTimeout(res, 40 + Math.random() * 40));
+    async function typeCode() {
+      for (const line of codeLines) {
+        const p = document.createElement("div");
+        p.classList.add("line", line.class);
+        container.appendChild(p);
+        for (let i = 0; i < line.text.length; i++) {
+          p.textContent += line.text[i];
+          await new Promise(res => setTimeout(res, 25 + Math.random() * 20));
+        }
+        await new Promise(res => setTimeout(res, 300));
       }
     }
 
-    async function runIntro() {
-      const l1 = document.getElementById("line1");
-      const l2 = document.getElementById("line2");
-      const l3 = document.getElementById("line3");
+    typeCode();
 
-      await typeLine(l1, lines[0]);
-      await new Promise(r => setTimeout(r, 500));
-      await typeLine(l2, lines[1]);
-      await new Promise(r => setTimeout(r, 500));
-      await typeLine(l3, lines[2]);
-    }
-
-    runIntro();
-
-    // Hiện từng phần khi lướt
     const sections = document.querySelectorAll("section");
     window.addEventListener("scroll", () => {
       sections.forEach(sec => {
@@ -177,12 +167,10 @@
       });
     });
 
-    // Hai lựa chọn
     document.getElementById("option1").onclick = () => {
       document.getElementById("result").innerHTML = `
         <div class="sample-box">
           🌸 Chúc cô Oanh và những bông hoa xinh đẹp lớp 9/5 luôn rạng rỡ, hạnh phúc và đạt được mọi điều ước 20/10 này nhaa 💖✨
-          <br><br><small>(Mẫu web mini hiển thị 🌸)</small>
         </div>`;
     };
 
