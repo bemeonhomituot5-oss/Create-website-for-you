@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portfolio — Lập trình viên</title>
+  <style>
+    :root{--bg:#0b1020;--card:#0f1724;--accent:#6ee7b7;--muted:#9aa4b2;--glass: rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,'Helvetica Neue',Arial;background:linear-gradient(180deg,#071024 0%, #081226 60%);color:#e6eef6;-webkit-font-smoothing:antialiased}
+    .container{max-width:900px;margin:0 auto;padding:40px 20px}
+    header{display:flex;align-items:center;gap:18px}
+    .avatar{width:96px;height:96px;border-radius:12px;flex:0 0 96px;background:linear-gradient(135deg,#1f2937,#111827);display:grid;place-items:center;font-family:monospace;font-weight:700;color:var(--accent);box-shadow:0 8px 30px rgba(2,6,23,0.7)}
+    h1{font-size:28px;margin:0}
+    .subtitle{color:var(--muted);margin-top:6px}
+
+    /* typewriter */
+    .typewriter{font-family:monospace;display:inline-block;overflow:hidden;white-space:nowrap;border-right:2px solid var(--accent);padding-right:6px}
+
+    /* sections */
+    section{margin:48px 0;padding:28px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);backdrop-filter: blur(4px);}
+    .row{display:flex;gap:20px;align-items:center}
+    .col{flex:1}
+    .card-img{width:220px;height:140px;border-radius:10px;background:linear-gradient(135deg,#0f1724,#0b1220);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:600}
+
+    /* skill badges */
+    .badges{display:flex;gap:10px;flex-wrap:wrap}
+    .badge{padding:8px 12px;border-radius:999px;background:var(--glass);color:var(--muted);font-weight:600}
+
+    /* fade-in on scroll */
+    .reveal{opacity:0;transform:translateY(24px);transition:all 700ms cubic-bezier(.2,.9,.3,1)}
+    .reveal.visible{opacity:1;transform:none}
+
+    /* bottom choices */
+    .choices{display:flex;gap:16px;justify-content:center;margin-top:12px}
+    .btn{padding:14px 18px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--accent);font-weight:700;cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,#0ea5a3,#5eead4);color:#042022;border:none}
+
+    /* modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center;padding:20px}
+    .modal{max-width:760px;width:100%;background:linear-gradient(180deg,#071026, #0b1330);border-radius:12px;padding:20px;color:#eaf6f0;box-shadow:0 20px 60px rgba(2,6,23,0.7)}
+    .modal h3{margin:0 0 8px 0}
+    .close{float:right;background:transparent;border:none;color:var(--muted);font-size:18px;cursor:pointer}
+
+    form input, form textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;margin-top:8px}
+    .muted{color:var(--muted);font-size:13px}
+
+    footer{text-align:center;color:var(--muted);margin:40px 0}
+
+    @media (max-width:760px){.row{flex-direction:column}.card-img{width:100%;height:180px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="avatar">YOU</div>
+      <div>
+        <h1 class="reveal">Xin chào — mình là <span class="typewriter" id="type">một lập trình viên web</span></h1>
+        <div class="subtitle reveal">Mình làm web giúp bạn: portfolio, landing page, cửa hàng nhỏ, và hơn thế nữa.</div>
+      </div>
+    </header>
+
+    <section class="reveal">
+      <div class="row">
+        <div class="col">
+          <h2>Về mình</h2>
+          <p class="muted">Mình tập trung vào phát triển giao diện mượt, responsive và dễ sử dụng. Mình thích giải quyết vấn đề bằng code và giúp người khác có hiện diện trực tuyến.</p>
+
+          <h3 style="margin-top:14px">Kỹ năng</h3>
+          <div class="badges">
+            <div class="badge">HTML</div>
+            <div class="badge">CSS</div>
+            <div class="badge">JavaScript</div>
+            <div class="badge">React</div>
+            <div class="badge">Node.js</div>
+          </div>
+        </div>
+        <div class="card-img">Hình / Project</div>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2>Các dịch vụ mình cung cấp</h2>
+      <ul class="muted">
+        <li>Thiết kế & code landing page</li>
+        <li>Portfolio cá nhân</li>
+        <li>Tích hợp form liên hệ & chuyển hướng</li>
+      </ul>
+    </section>
+
+    <section class="reveal">
+      <h2>Dự án mẫu</h2>
+      <div class="row">
+        <div class="col">
+          <div class="card-img">Demo 1</div>
+        </div>
+        <div class="col">
+          <p class="muted">Mẫu nhỏ để bạn tham khảo — tập trung vào trải nghiệm người dùng nhẹ nhàng, load nhanh và dễ đọc trên điện thoại.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="reveal" style="text-align:center">
+      <h2>Sẵn sàng tạo trang cho bạn?</h2>
+      <div class="choices">
+        <button class="btn" id="btn-template">Theo mẫu có sẵn</button>
+        <button class="btn primary" id="btn-custom">Tạo mẫu theo yêu cầu</button>
+      </div>
+    </section>
+
+    <footer class="reveal">Mình dùng xưng hô là "mình" và gọi bạn là "bạn" — nếu bạn muốn thay đổi, báo mình nhé.</footer>
+  </div>
+
+  <!-- modal template -->
+  <div class="modal-backdrop" id="modal-template">
+    <div class="modal">
+      <button class="close" data-close>&times;</button>
+      <h3>Mẫu 20/10 — Demo</h3>
+      <p class="muted">Đây là nội dung mẫu 20/10 mà bạn yêu cầu (mình đã chuẩn bị một bản demo đơn giản).</p>
+      <div style="margin-top:12px;padding:12px;background:rgba(255,255,255,0.02);border-radius:8px">
+        <h4 style="margin:6px 0">Tiêu đề: Chúc mừng 20/10</h4>
+        <p class="muted">Một layout đơn giản: ảnh banner, vài đoạn mô tả, và nút liên hệ.</p>
+        <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn primary" onclick="location.href='#'">Xem chi tiết</button>
+          <button class="btn" onclick="closeModal('modal-template')">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal custom (form) -->
+  <div class="modal-backdrop" id="modal-custom">
+    <div class="modal">
+      <button class="close" data-close>&times;</button>
+      <h3>Tạo mẫu theo yêu cầu</h3>
+      <p class="muted">Điền thông tin liên hệ. Bạn có thể bỏ trống phần Facebook — nếu để trống, sẽ dẫn tới facebook.com.</p>
+      <form id="customForm">
+        <label class="muted">Tên bạn</label>
+        <input name="name" placeholder="Tên của bạn" required />
+        <label class="muted">Email (tuỳ chọn)</label>
+        <input name="email" placeholder="Email của bạn" />
+        <label class="muted">Facebook URL (sao chép link trang Facebook của bạn)</label>
+        <input name="fb" placeholder="https://facebook.com/username" />
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="btn primary" type="submit">Tạo tài khoản</button>
+          <button class="btn" type="button" onclick="closeModal('modal-custom')">Huỷ</button>
+        </div>
+      </form>
+      <div id="thanks" style="display:none;margin-top:12px;padding:12px;background:rgba(255,255,255,0.02);border-radius:8px">
+        <strong>Cảm ơn!</strong>
+        <p class="muted">Mình sẽ liên hệ bạn sớm. Chuyển hướng tới Facebook...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Typewriter effect
+    const typeEl = document.getElementById('type');
+    const text = 'một lập trình viên web';
+    let i=0;
+    function type(){
+      if(i<text.length){
+        typeEl.textContent = text.slice(0,i+1);
+        i++;setTimeout(type,60);
+      } else { typeEl.style.borderRight='none' }
+    }
+    type();
+
+    // Reveal on scroll
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting) e.target.classList.add('visible');
+      })
+    },{threshold:0.15});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+    // Modal logic
+    function openModal(id){
+      document.getElementById(id).style.display='flex';
+    }
+    function closeModal(id){
+      document.getElementById(id).style.display='none';
+    }
+    document.getElementById('btn-template').addEventListener('click',()=>openModal('modal-template'));
+    document.getElementById('btn-custom').addEventListener('click',()=>openModal('modal-custom'));
+    document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',function(){this.closest('.modal-backdrop').style.display='none'}));
+
+    // Form submit
+    document.getElementById('customForm').addEventListener('submit',function(e){
+      e.preventDefault();
+      const fd = new FormData(this);
+      const fb = fd.get('fb')?.trim();
+      // show thanks
+      this.style.display='none';
+      document.getElementById('thanks').style.display='block';
+      setTimeout(()=>{
+        // redirect to fb or default
+        const target = fb && fb.length>5 ? fb : 'https://facebook.com';
+        window.open(target, '_blank');
+      },1500);
+    });
+
+    // small accessibility: close modal on backdrop click
+    document.querySelectorAll('.modal-backdrop').forEach(back=>{
+      back.addEventListener('click',e=>{ if(e.target===back) back.style.display='none' })
+    });
+  </script>
+</body>
+</html>
