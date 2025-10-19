@@ -1,271 +1,130 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hoàng Huy | Web Developer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giới thiệu bản thân - Coder Vibes</title>
   <style>
-    * {margin: 0; padding: 0; box-sizing: border-box;}
-    body {
-      font-family: 'Fira Code', monospace;
-      background: radial-gradient(circle at 20% 20%, #0d1117, #000);
-      color: #00ffcc;
-      overflow-x: hidden;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       scroll-behavior: smooth;
     }
-
-    ::selection { background: #00ffcc33; }
-
-    .container {
-      width: 90%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 100px 0;
+    body {
+      font-family: 'Fira Code', monospace;
+      background: radial-gradient(circle at top left, #0a0a0f, #000);
+      color: #00ffcc;
+      overflow-x: hidden;
     }
-
-    h1, h2 {
-      text-shadow: 0 0 10px #00ffe6, 0 0 20px #00ffe633;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-    }
-
-    h2 {
-      font-size: 1.8rem;
-      margin: 60px 0 20px;
-    }
-
-    p {
-      color: #b2fff5;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .section {
+    section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      text-align: center;
       opacity: 0;
       transform: translateY(50px);
-      transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: all 1.2s ease;
     }
-    .section.show {
+    section.show {
       opacity: 1;
       transform: translateY(0);
     }
-
-    button {
-      background: transparent;
-      border: 1px solid #00ffc3;
-      color: #00ffc3;
-      padding: 12px 24px;
-      font-family: 'Fira Code', monospace;
-      border-radius: 8px;
-      margin-right: 20px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 10px #00ffc355;
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #00e6b8;
+      text-shadow: 0 0 10px #00ffcc;
     }
-
-    button:hover {
-      background: #00ffc3;
-      color: #000;
-      box-shadow: 0 0 20px #00ffc3;
-      transform: translateY(-3px);
+    p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      max-width: 700px;
     }
-
-    form {
-      margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      width: 100%;
-      max-width: 400px;
-    }
-
-    input {
-      background: #0d1117;
-      border: 1px solid #00ffc3;
-      padding: 10px;
-      color: #00ffc3;
-      border-radius: 6px;
-      font-family: 'Fira Code', monospace;
-      transition: 0.3s;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: #00ffe6;
-      box-shadow: 0 0 10px #00ffe6aa;
-    }
-
-    .thanks {
+    .btn-group {
       margin-top: 40px;
-      color: #00ffc3;
-      text-shadow: 0 0 15px #00ffc3;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
     }
-
+    button {
+      background: #001f1f;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      padding: 12px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      border-radius: 6px;
+    }
+    button:hover {
+      background: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 20px #00ffcc;
+    }
     footer {
-      text-align: center;
-      margin-top: 80px;
-      color: #00ffe6aa;
+      margin-top: 50px;
       font-size: 0.9rem;
+      opacity: 0.7;
     }
-
-    /* Typing intro */
-    .typing {
-      display: inline-block;
-      border-right: 2px solid #00ffc3;
-      white-space: nowrap;
-      overflow: hidden;
-      width: 0;
-      animation: typing 3s steps(30, end) forwards, blink 0.7s infinite;
+    @media (max-width: 768px) {
+      h1 { font-size: 2rem; }
+      p { font-size: 1rem; }
+      button { width: 80%; }
     }
-
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-
-    @keyframes blink {
-      50% { border-color: transparent; }
-    }
-
-    iframe.preview {
-      width: 100%;
-      height: 400px;
-      border: none;
-      border-radius: 10px;
-      margin-top: 20px;
-      box-shadow: 0 0 20px #00ffc366;
-      transform: scale(0.95);
-      transition: 0.4s;
-    }
-
-    iframe.preview:hover {
-      transform: scale(1);
-      box-shadow: 0 0 40px #00ffc3aa;
-    }
-
-    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1 class="typing">Xin chào, mình là Hoàng Huy 💻</h1>
-    <div class="section">
-      <h2>Về mình</h2>
-      <p>Mình thích lập trình web, đặc biệt là tạo ra những trang web hiệu ứng mượt mà, đậm chất coder và thân thiện với người dùng.</p>
+
+  <section>
+    <h1>Xin chào, mình là Huy 👋</h1>
+    <p>Mình là một lập trình viên đam mê sáng tạo web — nơi mà từng dòng code trở thành câu chuyện. Hãy cùng mình khám phá nhé!</p>
+  </section>
+
+  <section>
+    <h1>✨ Kỹ năng & Đam mê</h1>
+    <p>Mình yêu thích lập trình web, đặc biệt là tạo ra giao diện mượt mà, sáng tạo và có tính tương tác cao. HTML, CSS, JS chính là công cụ kể chuyện của mình.</p>
+  </section>
+
+  <section>
+    <h1>🚀 Cùng bắt đầu</h1>
+    <p>Bạn có thể chọn theo mẫu có sẵn hoặc tạo một mẫu riêng của mình.</p>
+    <div class="btn-group">
+      <button onclick="goMauSan()">Theo mẫu có sẵn</button>
+      <button onclick="goTaoMau()">Tạo theo yêu cầu</button>
     </div>
+  </section>
 
-    <div class="section">
-      <h2>Kỹ năng</h2>
-      <p>HTML • CSS • JavaScript • React • TailwindCSS • GitHub</p>
-    </div>
-
-    <div class="section">
-      <h2>Lựa chọn của bạn</h2>
-      <button id="sampleBtn">Theo mẫu có sẵn (20/10)</button>
-      <button id="customBtn">Tạo mẫu theo yêu cầu</button>
-
-      <div id="sample" class="hidden section">
-        <h3>Mẫu có sẵn (20/10)</h3>
-        <!-- 👇 Hiển thị bản mini demo -->
-        <iframe class="preview" srcdoc='
-          <!DOCTYPE html>
-          <html lang="vi">
-          <head>
-          <meta charset="UTF-8">
-          <style>
-          @import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
-          body {
-            margin: 0;
-            overflow: hidden;
-            background: linear-gradient(180deg, #ffd6e8, #ffeaf4);
-            font-family: "Dancing Script", cursive;
-            color: #ff4d88;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            height: 100vh;
-          }
-          .text-box {
-            background: rgba(255,255,255,0.5);
-            border-radius: 15px;
-            padding: 10px;
-            box-shadow: 0 0 10px rgba(255,150,200,0.4);
-          }
-          h1 {
-            font-size: 16px;
-            border-right: 2px solid #ff80ab;
-            white-space: normal;
-            overflow: hidden;
-            animation: typing 6s steps(60,end) forwards, blink 1s infinite;
-          }
-          @keyframes typing { from {width:0;} to {width:100%;} }
-          @keyframes blink { 50% {border-color:transparent;} }
-          </style>
-          </head>
-          <body>
-            <div class="text-box">
-              <h1>🌸 Chúc cô Oanh và những bông hoa xinh đẹp lớp 9/5 luôn rạng rỡ và hạnh phúc 🌸</h1>
-            </div>
-          </body>
-          </html>
-        '></iframe>
-      </div>
-
-      <div id="customForm" class="hidden section">
-        <form id="contactForm">
-          <input type="text" placeholder="Tên của bạn" required>
-          <input type="email" placeholder="Email liên hệ" required>
-          <button type="submit">Tạo tài khoản</button>
-        </form>
-        <p class="thanks hidden">Cảm ơn bạn 💖 — đang chuyển hướng...</p>
-      </div>
-    </div>
-
-    <footer>© 2025 Hoàng Huy — Mình làm web cho bạn 💻</footer>
-  </div>
+  <footer>
+    <p>© 2025 - Được làm bởi Huy (mình) và bạn 💻</p>
+  </footer>
 
   <script>
-    // Hiệu ứng cuộn
-    const sections = document.querySelectorAll('.section');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) entry.target.classList.add('show');
+    // Hiệu ứng hiện dần khi cuộn
+    const sections = document.querySelectorAll("section");
+    window.addEventListener("scroll", () => {
+      const triggerBottom = window.innerHeight * 0.8;
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect().top;
+        if (rect < triggerBottom) sec.classList.add("show");
       });
-    }, {threshold: 0.2});
-    sections.forEach(sec => observer.observe(sec));
-
-    // Nút chọn
-    const sampleBtn = document.getElementById('sampleBtn');
-    const customBtn = document.getElementById('customBtn');
-    const sample = document.getElementById('sample');
-    const formDiv = document.getElementById('customForm');
-    const form = document.getElementById('contactForm');
-    const thanks = document.querySelector('.thanks');
-
-    sampleBtn.addEventListener('click', () => {
-      sample.classList.remove('hidden');
-      formDiv.classList.add('hidden');
-      sample.scrollIntoView({ behavior: 'smooth' });
     });
 
-    customBtn.addEventListener('click', () => {
-      formDiv.classList.remove('hidden');
-      sample.classList.add('hidden');
-      formDiv.scrollIntoView({ behavior: 'smooth' });
-    });
+    function goMauSan() {
+      window.location.href = "https://your-sample-page-link.com"; // Thay bằng link mẫu 20/10 của mày
+    }
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      thanks.classList.remove('hidden');
+    function goTaoMau() {
+      alert("Tính năng tạo mẫu theo yêu cầu đang cập nhật. Sau khi tạo tài khoản, bạn sẽ được dẫn đến Facebook của mình 💚");
       setTimeout(() => {
-        window.location.href = "https://facebook.com/"; // đổi sang fb của mày nha
+        window.location.href = "https://www.facebook.com/"; // Thay bằng link fb của mày
       }, 2000);
-    });
+    }
   </script>
+
 </body>
 </html>
