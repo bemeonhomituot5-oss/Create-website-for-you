@@ -269,11 +269,38 @@ async function showPricePanel(){
 document.querySelector('.panel').addEventListener('click', ()=> out.focus());
 </script>
 
-  <script>
-  document.getElementById("choice2").addEventListener("click", () => {
-    window.open("https://www.facebook.com/huy.tim.cuc.tay/", "_blank");
-  });
+<div class="mt-8 flex gap-4">
+  <button onclick="showSample()" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-2xl transition-all">
+    Lựa chọn 1: Theo mẫu có sẵn
+  </button>
+
+  <button onclick="showFB()" class="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-2xl transition-all">
+    Lựa chọn 2: Xem Facebook
+  </button>
+</div>
+
+<!-- Vùng hiển thị kết quả -->
+<div id="result" class="mt-6 text-center"></div>
+
+<script>
+  function showSample() {
+    window.location.href = "https://bemeonhomituot5-oss.github.io/Ch-c-c-Oanh-v-c-c-b-n-n-xin-p-c-a-l-p-9-5-ng-y-20-10-vui-v-nha-/";
+  }
+
+  function showFB() {
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = `
+      <p class="text-green-400 text-lg mt-4">🌐 Facebook của mình nè: 
+        <a href="https://www.facebook.com/huy.tim.cuc.tay/" 
+           target="_blank" 
+           class="text-blue-400 underline hover:text-blue-300 transition-all">
+          https://www.facebook.com/huy.tim.cuc.tay/
+        </a>
+      </p>
+    `;
+  }
 </script>
+
 
 </body>
 </html>
