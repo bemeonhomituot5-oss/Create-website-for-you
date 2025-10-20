@@ -1,173 +1,265 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Giới thiệu bản thân - Huy Dev</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Courier New', monospace;
-    }
-
-    body {
-      background-color: #0d0d0d;
-      color: #e0e0e0;
-      min-height: 100vh;
-      overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    h1, p {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 1s forwards;
-    }
-
-    h1 {
-      font-size: 2rem;
-      color: #00ff99;
-      margin-bottom: 15px;
-    }
-
-    p {
-      font-size: 1rem;
-      color: #e0e0e0;
-      margin-bottom: 25px;
-      max-width: 90%;
-      text-align: center;
-      animation-delay: 0.4s;
-    }
-
-    .choices {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-      animation: fadeInUp 1s forwards;
-      animation-delay: 0.8s;
-    }
-
-    button {
-      background: transparent;
-      border: 1px solid #00ff99;
-      color: #00ff99;
-      padding: 12px 22px;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    button:hover {
-      background: #00ff99;
-      color: #0d0d0d;
-      transform: scale(1.05);
-    }
-
-    iframe {
-      width: 90%;
-      max-width: 800px;
-      height: 400px;
-      border: 1px solid #00ff99;
-      border-radius: 8px;
-      margin-top: 20px;
-      opacity: 0;
-      animation: fadeInUp 1s forwards;
-    }
-
-    .next-step, .info {
-      margin-top: 20px;
-      opacity: 0;
-      animation: fadeInUp 1s forwards;
-      animation-delay: 0.5s;
-    }
-
-    .info {
-      color: #fff;
-      text-align: center;
-    }
-
-    footer {
-      position: fixed;
-      bottom: 10px;
-      color: #666;
-      font-size: 0.9rem;
-    }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      iframe {
-        height: 250px;
-      }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>yuH — Terminal Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000;
+    --panel:#071116;
+    --text:#e6f7f2;
+    --muted:#9ad7cf;
+    --kw:#60d3ff;    /* keyword - blue */
+    --str:#c699ff;   /* string - purple */
+    --log:#7cff9d;   /* log - green */
+    --note:#ff7b7b;  /* red note */
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);font-family:'Fira Code', monospace;color:var(--text);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:18px auto;padding:18px}
+  .panel{
+    background:linear-gradient(180deg,var(--panel),#041015);
+    border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.03);
+    box-shadow:0 14px 40px rgba(0,0,0,0.6);
+    min-height:72vh;display:flex;flex-direction:column;gap:12px;
+  }
+  /* top bar */
+  .top{display:flex;gap:8px;align-items:center}
+  .dots{display:flex;gap:8px}
+  .dot{width:12px;height:12px;border-radius:999px}
+  .dot.r{background:#ff5f56} .dot.y{background:#ffbd2e} .dot.g{background:#27c93f}
+  .title{color:var(--muted);margin-left:8px;font-size:0.95rem}
+  /* output area */
+  .out{flex:1;overflow:auto;padding:10px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
+  .line{white-space:pre-wrap;line-height:1.5;word-break:break-word;font-size:15px}
+  .cursor{display:inline-block;width:10px;height:1.1em;background:var(--log);vertical-align:middle;margin-left:6px;animation:blink 1s steps(2,start) infinite}
+  @keyframes blink{50%{opacity:0}}
+  /* token colors */
+  .kw{color:var(--kw)}      /* keyword */
+  .str{color:var(--str)}    /* string */
+  .log{color:var(--log)}    /* log/text */
+  .note{color:var(--note)}  /* red/important */
+  .def{color:var(--text)}   /* default white */
+  /* controls */
+  .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:flex-start;padding-top:10px}
+  .cmd{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:10px 14px;border-radius:8px;cursor:pointer;transition:all .18s;font-family:'Fira Code'}
+  .cmd:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.12)}
+  /* preview iframe & form */
+  .side{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+  iframe.preview{width:360px;max-width:100%;height:260px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+  .form{display:flex;flex-direction:column;gap:8px;max-width:380px}
+  .input{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px;border-radius:8px;color:var(--muted);font-family:'Fira Code'}
+  .btn{background:var(--log);color:#012;border:none;padding:10px;border-radius:8px;cursor:pointer;font-weight:700}
+  .muted{color:#7aaeb0;font-size:0.95rem}
+  footer{color:#6fb7b3;text-align:center;margin-top:14px;font-size:0.95rem}
+  .hidden{display:none}
+  @media (max-width:720px){
+    .wrap{padding:10px}
+    iframe.preview{height:200px}
+    .line{font-size:14px}
+  }
+</style>
 </head>
 <body>
-  <h1>Xin chào, mình là Huy 👨‍💻</h1>
-  <p>Mình là Huy — một lập trình viên trẻ đam mê tạo ra những trang web đẹp, mượt và mang đậm phong cách cá nhân.  
-  Mình luôn mong được hợp tác cùng bạn để biến ý tưởng của bạn thành sản phẩm thật ấn tượng!</p>
+  <div class="wrap">
+    <div class="panel" role="region" aria-label="Terminal portfolio">
+      <div class="top">
+        <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+        <div class="title">~/portfolio — Trương Anh Hoàng Huy</div>
+      </div>
 
-  <div class="choices">
-    <button id="option1">Xem mẫu có sẵn</button>
-    <button id="option2">Tạo theo yêu cầu</button>
+      <div class="out" id="out" aria-live="polite" tabindex="0"></div>
+
+      <div class="controls">
+        <button class="cmd" id="btn1">▶ Lựa chọn 1 (Xem mẫu)</button>
+        <button class="cmd" id="btn2">✚ Lựa chọn 2 (Facebook)</button>
+        <div style="flex:1"></div>
+        <div class="muted">© Trương Anh Hoàng Huy 2025</div>
+      </div>
+    </div>
+    <footer style="margin-top:12px">Thiết kế phong cách terminal — responsive</footer>
   </div>
 
-  <div id="content"></div>
+<script>
+/* --------------------
+   Data: lines with tokens (text segments with classes)
+   Each line is array of segments: {t: 'text', c: 'kw'|'str'|'log'|'note'|'def'}
+   -------------------- */
+const introLines = [
+  [{t: 'Initializing portfolio', c:'kw'}, {t: '...', c:'def'}],
+  [{t: 'Loading modules', c:'kw'}, {t: ': [HTML] [CSS] [JS]', c:'def'}],
+  [{t: 'Name', c:'kw'}, {t: ': ', c:'def'}, {t: "Trương Anh Hoàng Huy", c:'str'}],
+  [{t: 'Role', c:'kw'}, {t: ': ', c:'def'}, {t: 'Web Developer', c:'str'}],
+  [{t: 'About', c:'kw'}, {t: ': ', c:'def'}, {t: 'Mình là Huy — lập trình viên trẻ, tạo web mượt, đẹp, & cá nhân hoá.', c:'log'}],
+  [{t: 'Ready', c:'kw'}, {t: ': ', c:'def'}, {t: 'Chọn 1 để xem mẫu, 2 để tới Facebook.', c:'log'}]
+];
 
-  <footer>Trương Anh Hoàng Huy © 2025</footer>
+const out = document.getElementById('out');
+const cursorHTML = '<span class="cursor" aria-hidden="true"></span>';
 
-  <script>
-    const content = document.getElementById("content");
-    const option1 = document.getElementById("option1");
-    const option2 = document.getElementById("option2");
+function makeLine() {
+  const div = document.createElement('div');
+  div.className = 'line';
+  return div;
+}
 
-    // Lựa chọn 1: hiển thị web mẫu + hiệu ứng
-    option1.addEventListener("click", () => {
-      content.innerHTML = `
-        <iframe src="https://bemeonhomituot5-oss.github.io/Ch-c-c-Oanh-v-c-c-b-n-n-xin-p-c-a-l-p-9-5-ng-y-20-10-vui-v-nha-/"></iframe>
-      `;
-      setTimeout(() => {
-        const nextBtn = document.createElement("button");
-        nextBtn.classList.add("next-step");
-        nextBtn.textContent = "Tiếp theo ➤";
-        nextBtn.onclick = showInfo;
-        content.appendChild(nextBtn);
-      }, 6000); // thời gian cho "web mẫu" chạy xong
-    });
+// Type a line made of segments with per-char typing and token classes
+function typeLineSegments(segments, speedBase=18) {
+  return new Promise(resolve => {
+    const line = makeLine();
+    out.appendChild(line);
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    line.appendChild(cursor);
 
-    // Lựa chọn 2: chuyển thẳng tới FB
-    option2.addEventListener("click", () => {
-      window.location.href = "https://www.facebook.com/huy.tim.cuc.tay/";
-    });
-
-    // Khi nhấn "Tiếp theo" hiện giá + fb
-    function showInfo() {
-      content.innerHTML = `
-        <div class="info">
-          <h2>💰 Giá: 100.000đ</h2>
-          <p>Liên hệ mình qua Facebook để đặt web:</p>
-          <a href="https://www.facebook.com/huy.tim.cuc.tay/" target="_blank" style="color:#00ff99; text-decoration:none;">
-            👉 Facebook của mình
-          </a>
-        </div>
-      `;
+    // create spans for each segment (empty for now)
+    let segIndex = 0, charIndex = 0;
+    function step() {
+      if (segIndex >= segments.length) {
+        // finished whole line
+        if (cursor.parentNode) cursor.remove();
+        out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+        return resolve();
+      }
+      const seg = segments[segIndex];
+      if (!line._spans) line._spans = [];
+      if (!line._spans[segIndex]) {
+        const s = document.createElement('span');
+        s.className = seg.c || 'def';
+        line.insertBefore(s, cursor);
+        line._spans[segIndex] = s;
+      }
+      const span = line._spans[segIndex];
+      if (charIndex < seg.t.length) {
+        span.textContent += seg.t[charIndex++];
+        // variable delay for natural typing
+        let dt = speedBase + Math.random()*20;
+        if (seg.t[charIndex-1] === ' ') dt += 10;
+        setTimeout(step, dt);
+        out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+      } else {
+        segIndex++;
+        charIndex = 0;
+        setTimeout(step, 60);
+      }
     }
-  </script>
+    step();
+  });
+}
+
+// Print all intro lines sequentially
+async function runIntro() {
+  for (let i=0;i<introLines.length;i++){
+    await typeLineSegments(introLines[i], 16);
+    await sleep(200 + Math.random()*250);
+  }
+  // final prompt line
+  const last = makeLine();
+  last.innerHTML = '<span class="kw">~$</span> <span class="log">ready</span> ' + cursorHTML;
+  out.appendChild(last);
+  out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+runIntro();
+
+/* ------------------------------
+   Controls behavior
+   ------------------------------ */
+const btn1 = document.getElementById('btn1');
+const btn2 = document.getElementById('btn2');
+
+const sampleUrl = 'https://bemeonhomituot5-oss.github.io/Ch-c-c-Oanh-v-c-c-b-n-n-xin-p-c-a-l-p-9-5-ng-y-20-10-vui-v-nha-/';
+let currentPreview; // iframe element reference
+
+btn1.addEventListener('click', async ()=>{
+  // log in terminal
+  await typeLineSegments([{t:'> ', c:'def'},{t:'Opening sample preview...', c:'log'}], 10);
+  // show iframe preview in a "line"
+  const wrapper = makeLine();
+  const frame = document.createElement('iframe');
+  frame.className = 'preview';
+  frame.src = sampleUrl;
+  frame.title = 'Sample preview';
+  // place iframe under out as a special element
+  // we'll append a container line that holds the iframe
+  const container = document.createElement('div');
+  container.style.marginTop = '12px';
+  container.style.display = 'flex';
+  container.style.flexDirection = 'column';
+  container.style.gap = '10px';
+  container.style.alignItems = 'center';
+  // small caption line
+  const caption = document.createElement('div');
+  caption.className = 'line';
+  caption.innerHTML = '<span class="kw">[preview]</span> <span class="def">Mẫu (chạy trong khung)</span>';
+  container.appendChild(caption);
+  container.appendChild(frame);
+  // append container as node to out (not inside line)
+  out.appendChild(container);
+  out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+  currentPreview = frame;
+
+  // Wait for iframe load OR timeout fallback (max 8s)
+  let loaded = false;
+  const onload = ()=>{ loaded = true; showNextBtn(container); }
+  frame.addEventListener('load', onload);
+  // fallback if load doesn't fire (CORS or same origin), use timeout
+  setTimeout(()=>{ if(!loaded) showNextBtn(container); }, 6000);
+});
+
+btn2.addEventListener('click', ()=>{
+  // direct to FB
+  window.open('https://www.facebook.com/huy.tim.cuc.tay/', '_blank');
+});
+
+/* show "Tiếp theo" button under the preview container */
+function showNextBtn(container) {
+  // avoid adding twice
+  if (container._nextShown) return;
+  container._nextShown = true;
+  const btn = document.createElement('button');
+  btn.className = 'btn';
+  btn.textContent = 'Tiếp theo →';
+  btn.style.alignSelf = 'center';
+  btn.onclick = async ()=>{
+    // log then show price & FB in code style
+    await typeLineSegments([{t:'> ', c:'def'},{t:'Proceeding to pricing...', c:'log'}], 10);
+    showPricePanel();
+  };
+  container.appendChild(btn);
+  out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+}
+
+/* Show price & FB in code-styled output */
+async function showPricePanel(){
+  // clear area below (but keep terminal history)
+  // append a new code-like panel
+  const panel = makeLine();
+  panel.style.paddingTop = '10px';
+  panel.innerHTML = '<span class="kw">/* Pricing & Contact */</span>';
+  out.appendChild(panel);
+  out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+
+  // type price line
+  await typeLineSegments([{t:'> ', c:'def'},{t:'Price', c:'kw'},{t:': ', c:'def'},{t:'100000', c:'note'},{t:' đ', c:'def'}], 18);
+  await sleep(200);
+  await typeLineSegments([{t:'> ', c:'def'},{t:'Contact', c:'kw'},{t:': ', c:'def'},{t:'Facebook', c:'str'},{t:' → ', c:'def'},{t:'https://www.facebook.com/huy.tim.cuc.tay/', c:'str'}], 16);
+
+  // render clickable summary below
+  const summary = document.createElement('div');
+  summary.className = 'line';
+  summary.style.marginTop = '8px';
+  summary.innerHTML = '<span class="def">Open contact: </span><a href="https://www.facebook.com/huy.tim.cuc.tay/" target="_blank" style="color:var(--kw);text-decoration:none">Facebook — liên hệ ngay</a>';
+  out.appendChild(summary);
+  out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
+}
+
+/* accessibility: focus to out on click */
+document.querySelector('.panel').addEventListener('click', ()=> out.focus());
+</script>
 </body>
 </html>
