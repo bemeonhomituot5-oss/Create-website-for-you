@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>yuH — Terminal Portfolio</title>
+<title>yuH — Landing → Terminal Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -11,14 +11,56 @@
     --panel:#071116;
     --text:#e6f7f2;
     --muted:#9ad7cf;
-    --kw:#60d3ff;    /* keyword - blue */
-    --str:#c699ff;   /* string - purple */
-    --log:#7cff9d;   /* log - green */
-    --note:#ff7b7b;  /* red/important */
-    --coming:#ffdd57;/* coming soon accent */
+    --kw:#60d3ff;
+    --str:#c699ff;
+    --log:#7cff9d;
+    --note:#ff7b7b;
+    --coming:#ffdd57;
   }
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);font-family:'Fira Code', monospace;color:var(--text);-webkit-font-smoothing:antialiased}
+  html,body{height:100%;margin:0;background:var(--bg);font-family:'Fira Code', monospace;color:var(--text);-webkit-font-smoothing:antialiased;overflow:hidden}
+  /* --- Intro (shader) --- */
+  #intro {
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:#000; z-index:30;
+    transition:opacity .9s ease, visibility .9s ease;
+  }
+  canvas#glCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .intro-ui{
+    position:relative; z-index:40; text-align:center; pointer-events:none;
+    display:flex;flex-direction:column;align-items:center;gap:18px;
+  }
+  .hero {
+    font-size:28px; color:var(--kw); text-shadow:0 6px 32px rgba(0,0,0,0.6);
+    pointer-events:auto;
+  }
+  .sub { color:rgba(255,255,255,0.6); font-size:13px; pointer-events:auto; }
+  .btn-get {
+    pointer-events:auto;
+    margin-top:8px;
+    background:linear-gradient(90deg,#ffffff10,#ffffff08);
+    border:1px solid rgba(255,255,255,0.06);
+    color:var(--text); padding:12px 20px; border-radius:12px;
+    cursor:pointer; font-weight:700; font-family:'Fira Code'; backdrop-filter: blur(6px);
+    transition:transform .15s ease, background .15s;
+  }
+  .btn-get:hover{ transform:translateY(-6px); background:linear-gradient(90deg,#ffffff12,#ffffff10) }
+
+  /* small hint */
+  .hint{ font-size:12px;color:rgba(255,255,255,0.35); margin-top:6px }
+
+  /* fade out */
+  #intro.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+
+  /* --- Main terminal site (hidden initially) --- */
+  #site {
+    position:relative; inset:0; width:100%; height:100%; overflow:auto;
+    opacity:0; visibility:hidden; transition:opacity .9s ease, visibility .9s;
+    background:var(--bg);
+  }
+  #site.visible{ opacity:1; visibility:visible; }
+
+  /* reuse the terminal portfolio styles (from your original) */
   .wrap{max-width:1060px;margin:18px auto;padding:18px}
   .panel{
     background:linear-gradient(180deg,var(--panel),#041015);
@@ -67,36 +109,416 @@
     .wrap{padding:8px}
     iframe.preview{height:200px}
   }
+
+  /* accessibility focus */
+  .panel:focus{ outline: 2px solid rgba(96,211,255,0.07) }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="panel" role="region" aria-label="Terminal portfolio">
-      <div class="top">
-        <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
-        <div class="title">~/portfolio — Trương Anh Hoàng Huy</div>
-      </div>
-
-      <div class="out" id="out" aria-live="polite" tabindex="0"></div>
-
-      <div class="controls">
-        <button class="cmd" id="btn1">▶ Lựa chọn 1 (Xem mẫu có sẵn)</button>
-        <button class="cmd" id="btn2">✚ Lựa chọn 2 (Mẫu theo yêu cầu)</button>
-        <div style="flex:1"></div>
-        <div class="muted">© Trương Anh Hoàng Huy 2025</div>
-      </div>
-
-      <!-- area where preview + coming soon will be injected -->
-      <div id="previewArea" class="side" aria-hidden="true" style="margin-top:10px"></div>
+  <!-- INTRO (shader + UI) -->
+  <div id="intro" role="dialog" aria-label="Intro">
+    <canvas id="glCanvas"></canvas>
+    <div class="intro-ui" aria-hidden="false">
+      <div class="hero">FAULTY TERMINAL</div>
+      <div class="sub">An experimental shader intro. Move mouse to interact.</div>
+      <button id="getBtn" class="btn-get" aria-label="Get started">Get Started</button>
+      <div class="hint">Click anywhere on the page to enable sound & interaction</div>
     </div>
-
-    <footer style="margin-top:12px">Thiết kế phong cách terminal — responsive</footer>
   </div>
 
-  <!-- typing sound (will play only after user interaction) -->
-  <audio id="typeSound" src="https://actions.google.com/sounds/v1/foley/keyboard_single_keypress.ogg" preload="auto"></audio>
+  <!-- MAIN SITE (terminal portfolio) -->
+  <div id="site" role="main" aria-hidden="true">
+    <div class="wrap">
+      <div class="panel" role="region" aria-label="Terminal portfolio">
+        <div class="top">
+          <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+          <div class="title">~/portfolio — Trương Anh Hoàng Huy</div>
+        </div>
+
+        <div class="out" id="out" aria-live="polite" tabindex="0"></div>
+
+        <div class="controls">
+          <button class="cmd" id="btn1">▶ Lựa chọn 1 (Xem mẫu có sẵn)</button>
+          <button class="cmd" id="btn2">✚ Lựa chọn 2 (Mẫu theo yêu cầu)</button>
+          <div style="flex:1"></div>
+          <div class="muted">© Trương Anh Hoàng Huy 2025</div>
+        </div>
+
+        <!-- area where preview + coming soon will be injected -->
+        <div id="previewArea" class="side" aria-hidden="true" style="margin-top:10px"></div>
+      </div>
+
+      <footer style="margin-top:12px">Thiết kế phong cách terminal — responsive</footer>
+    </div>
+
+    <!-- typing sound (will play only after user interaction) -->
+    <audio id="typeSound" src="https://actions.google.com/sounds/v1/foley/keyboard_single_keypress.ogg" preload="auto"></audio>
+  </div>
 
 <script>
+/* ------------------ WebGL shader setup ------------------ */
+/* Vertex shader (full-screen triangle) */
+const vsSource = `#version 100
+attribute vec2 position;
+varying vec2 vUv;
+void main() {
+  vUv = position * 0.5 + 0.5;
+  gl_Position = vec4(position, 0.0, 1.0);
+}`;
+
+/* Fragment shader adapted from user's shader (slightly simplified uniforms setup) */
+const fsSource = `#version 100
+precision mediump float;
+varying vec2 vUv;
+uniform float iTime;
+uniform vec2 iResolution;
+uniform float uScale;
+uniform vec2 uGridMul;
+uniform float uDigitSize;
+uniform float uScanlineIntensity;
+uniform float uGlitchAmount;
+uniform float uFlickerAmount;
+uniform float uNoiseAmp;
+uniform float uChromaticAberration;
+uniform float uDither;
+uniform float uCurvature;
+uniform vec3 uTint;
+uniform vec2 uMouse;
+uniform float uMouseStrength;
+uniform float uUseMouse;
+uniform float uPageLoadProgress;
+uniform float uUsePageLoadAnimation;
+uniform float uBrightness;
+
+float time;
+float hash21(vec2 p){
+  p = fract(p * 234.56);
+  p += dot(p, p + 34.56);
+  return fract(p.x * p.y);
+}
+float noise(vec2 p){
+  return sin(p.x * 10.0) * sin(p.y * (3.0 + sin(time * 0.090909))) + 0.2;
+}
+mat2 rotate(float angle){
+  float c = cos(angle);
+  float s = sin(angle);
+  return mat2(c, -s, s, c);
+}
+float fbm(vec2 p){
+  p *= 1.1;
+  float f = 0.0;
+  float amp = 0.5 * uNoiseAmp;
+  mat2 modify0 = rotate(time * 0.02);
+  f += amp * noise(p);
+  p = modify0 * p * 2.0;
+  amp *= 0.454545;
+  mat2 modify1 = rotate(time * 0.02);
+  f += amp * noise(p);
+  p = modify1 * p * 2.0;
+  amp *= 0.454545;
+  mat2 modify2 = rotate(time * 0.08);
+  f += amp * noise(p);
+  return f;
+}
+float pattern(vec2 p, out vec2 q, out vec2 r) {
+  vec2 offset1 = vec2(1.0);
+  vec2 offset0 = vec2(0.0);
+  mat2 rot01 = rotate(0.1 * time);
+  mat2 rot1 = rotate(0.1);
+  q = vec2(fbm(p + offset1), fbm(rot01 * p + offset1));
+  r = vec2(fbm(rot1 * q + offset0), fbm(q + offset0));
+  return fbm(p + r);
+}
+float digit(vec2 p){
+    vec2 grid = uGridMul * 15.0;
+    vec2 s = floor(p * grid) / grid;
+    p = p * grid;
+    vec2 q; vec2 r;
+    float intensity = pattern(s * 0.1, q, r) * 1.3 - 0.03;
+    if(uUseMouse > 0.5){
+        vec2 mouseWorld = uMouse * uScale;
+        float distToMouse = distance(s, mouseWorld);
+        float mouseInfluence = exp(-distToMouse * 8.0) * uMouseStrength * 10.0;
+        intensity += mouseInfluence;
+        float ripple = sin(distToMouse * 20.0 - iTime * 5.0) * 0.1 * mouseInfluence;
+        intensity += ripple;
+    }
+    if(uUsePageLoadAnimation > 0.5){
+        float cellRandom = fract(sin(dot(s, vec2(12.9898, 78.233))) * 43758.5453);
+        float cellDelay = cellRandom * 0.8;
+        float cellProgress = clamp((uPageLoadProgress - cellDelay) / 0.2, 0.0, 1.0);
+        float fadeAlpha = smoothstep(0.0, 1.0, cellProgress);
+        intensity *= fadeAlpha;
+    }
+    p = fract(p);
+    p *= uDigitSize;
+    float px5 = p.x * 5.0;
+    float py5 = (1.0 - p.y) * 5.0;
+    float x = fract(px5);
+    float y = fract(py5);
+    float i = floor(py5) - 2.0;
+    float j = floor(px5) - 2.0;
+    float n = i * i + j * j;
+    float f = n * 0.0625;
+    float isOn = step(0.1, intensity - f);
+    float brightness = isOn * (0.2 + y * 0.8) * (0.75 + x * 0.25);
+    return step(0.0, p.x) * step(p.x, 1.0) * step(0.0, p.y) * step(p.y, 1.0) * brightness;
+}
+float onOff(float a, float b, float c){
+  return step(c, sin(iTime + a * cos(iTime * b))) * uFlickerAmount;
+}
+float displace(vec2 look){
+    float y = look.y - mod(iTime * 0.25, 1.0);
+    float window = 1.0 / (1.0 + 50.0 * y * y);
+    return sin(look.y * 20.0 + iTime) * 0.0125 * onOff(4.0, 2.0, 0.8) * (1.0 + cos(iTime * 60.0)) * window;
+}
+vec3 getColor(vec2 p){
+    float bar = step(mod(p.y + time * 20.0, 1.0), 0.2) * 0.4 + 1.0;
+    bar *= uScanlineIntensity;
+    float displacement = displace(p);
+    p.x += displacement;
+    if (uGlitchAmount != 1.0) {
+      float extra = displacement * (uGlitchAmount - 1.0);
+      p.x += extra;
+    }
+    float middle = digit(p);
+    const float off = 0.002;
+    float sum = digit(p + vec2(-off, -off)) + digit(p + vec2(0.0, -off)) + digit(p + vec2(off, -off)) +
+                digit(p + vec2(-off, 0.0)) + digit(p + vec2(0.0, 0.0)) + digit(p + vec2(off, 0.0)) +
+                digit(p + vec2(-off, off)) + digit(p + vec2(0.0, off)) + digit(p + vec2(off, off));
+    vec3 baseColor = vec3(0.9) * middle + sum * 0.1 * vec3(1.0) * bar;
+    return baseColor;
+}
+vec2 barrel(vec2 uv){
+  vec2 c = uv * 2.0 - 1.0;
+  float r2 = dot(c, c);
+  c *= 1.0 + uCurvature * r2;
+  return c * 0.5 + 0.5;
+}
+void main() {
+    time = iTime * 0.333333;
+    vec2 uv = vUv;
+    if(uCurvature != 0.0){
+      uv = barrel(uv);
+    }
+    vec2 p = uv * uScale;
+    vec3 col = getColor(p);
+    if(uChromaticAberration != 0.0){
+      vec2 ca = vec2(uChromaticAberration) / iResolution;
+      col.r = getColor(p + ca).r;
+      col.b = getColor(p - ca).b;
+    }
+    col *= uTint;
+    col *= uBrightness;
+    if(uDither > 0.0){
+      float rnd = hash21(gl_FragCoord.xy);
+      col += (rnd - 0.5) * (uDither * 0.003922);
+    }
+    gl_FragColor = vec4(col, 1.0);
+}`;
+
+/* helper: compile shader */
+function compile(gl, source, type){
+  const sh = gl.createShader(type);
+  gl.shaderSource(sh, source);
+  gl.compileShader(sh);
+  if(!gl.getShaderParameter(sh, gl.COMPILE_STATUS)){
+    console.warn(gl.getShaderInfoLog(sh));
+    gl.deleteShader(sh);
+    return null;
+  }
+  return sh;
+}
+
+/* build program */
+function createProgram(gl, vs, fs){
+  const v = compile(gl, vs, gl.VERTEX_SHADER);
+  const f = compile(gl, fs, gl.FRAGMENT_SHADER);
+  if(!v || !f) return null;
+  const p = gl.createProgram();
+  gl.attachShader(p, v);
+  gl.attachShader(p, f);
+  gl.linkProgram(p);
+  if(!gl.getProgramParameter(p, gl.LINK_STATUS)){
+    console.warn(gl.getProgramInfoLog(p));
+    return null;
+  }
+  return p;
+}
+
+/* init canvas + program */
+const canvas = document.getElementById('glCanvas');
+const gl = canvas.getContext('webgl', { antialias:true, preserveDrawingBuffer:false });
+let prog = null;
+let startTime = performance.now();
+let mouse = {x:0.5, y:0.5};
+let props = {
+  uScale: 1.0,
+  uGridMul: [2.0,1.0],
+  uDigitSize: 1.5,
+  uScanlineIntensity: 0.3,
+  uGlitchAmount: 1.0,
+  uFlickerAmount: 1.0,
+  uNoiseAmp: 0.0,
+  uChromaticAberration: 0.0,
+  uDither: 0.0,
+  uCurvature: 0.2,
+  uTint: [1.0,1.0,1.0],
+  uMouseStrength: 0.2,
+  uUseMouse: 1.0,
+  uPageLoadProgress: 0.0,
+  uUsePageLoadAnimation: 1.0,
+  uBrightness: 1.0
+};
+
+function resizeCanvas(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.max(1, Math.floor(canvas.clientWidth * dpr));
+  const h = Math.max(1, Math.floor(canvas.clientHeight * dpr));
+  if(canvas.width !== w || canvas.height !== h){
+    canvas.width = w; canvas.height = h;
+  }
+  gl.viewport(0,0,canvas.width,canvas.height);
+}
+function initGL(){
+  if(!gl) return;
+  prog = createProgram(gl, vsSource, fsSource);
+  if(!prog) return;
+  gl.useProgram(prog);
+
+  // full-screen triangle (positions)
+  const verts = new Float32Array([-1,-1, 3,-1, -1,3]);
+  const vbo = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+  gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
+  const posLoc = gl.getAttribLocation(prog, 'position');
+  gl.enableVertexAttribArray(posLoc);
+  gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+  // uniforms locations cache
+  prog.uTime = gl.getUniformLocation(prog, 'iTime');
+  prog.uRes = gl.getUniformLocation(prog, 'iResolution');
+  prog.uScale = gl.getUniformLocation(prog, 'uScale');
+  prog.uGridMul = gl.getUniformLocation(prog, 'uGridMul');
+  prog.uDigitSize = gl.getUniformLocation(prog, 'uDigitSize');
+  prog.uScanlineIntensity = gl.getUniformLocation(prog, 'uScanlineIntensity');
+  prog.uGlitchAmount = gl.getUniformLocation(prog, 'uGlitchAmount');
+  prog.uFlickerAmount = gl.getUniformLocation(prog, 'uFlickerAmount');
+  prog.uNoiseAmp = gl.getUniformLocation(prog, 'uNoiseAmp');
+  prog.uChromaticAberration = gl.getUniformLocation(prog, 'uChromaticAberration');
+  prog.uDither = gl.getUniformLocation(prog, 'uDither');
+  prog.uCurvature = gl.getUniformLocation(prog, 'uCurvature');
+  prog.uTint = gl.getUniformLocation(prog, 'uTint');
+  prog.uMouse = gl.getUniformLocation(prog, 'uMouse');
+  prog.uMouseStrength = gl.getUniformLocation(prog, 'uMouseStrength');
+  prog.uUseMouse = gl.getUniformLocation(prog, 'uUseMouse');
+  prog.uPageLoadProgress = gl.getUniformLocation(prog, 'uPageLoadProgress');
+  prog.uUsePageLoadAnimation = gl.getUniformLocation(prog, 'uUsePageLoadAnimation');
+  prog.uBrightness = gl.getUniformLocation(prog, 'uBrightness');
+
+  // initial uniform values
+  gl.uniform1f(prog.uScale, props.uScale);
+  gl.uniform2fv(prog.uGridMul, new Float32Array(props.uGridMul));
+  gl.uniform1f(prog.uDigitSize, props.uDigitSize);
+  gl.uniform1f(prog.uScanlineIntensity, props.uScanlineIntensity);
+  gl.uniform1f(prog.uGlitchAmount, props.uGlitchAmount);
+  gl.uniform1f(prog.uFlickerAmount, props.uFlickerAmount);
+  gl.uniform1f(prog.uNoiseAmp, props.uNoiseAmp);
+  gl.uniform1f(prog.uChromaticAberration, props.uChromaticAberration);
+  gl.uniform1f(prog.uDither, props.uDither);
+  gl.uniform1f(prog.uCurvature, props.uCurvature);
+  gl.uniform3fv(prog.uTint, new Float32Array(props.uTint));
+  gl.uniform2fv(prog.uMouse, new Float32Array([mouse.x, mouse.y]));
+  gl.uniform1f(prog.uMouseStrength, props.uMouseStrength);
+  gl.uniform1f(prog.uUseMouse, props.uUseMouse);
+  gl.uniform1f(prog.uPageLoadProgress, props.uPageLoadProgress);
+  gl.uniform1f(prog.uUsePageLoadAnimation, props.uUsePageLoadAnimation);
+  gl.uniform1f(prog.uBrightness, props.uBrightness);
+}
+
+function render(t){
+  if(!gl || !prog) return;
+  resizeCanvas();
+  const seconds = (t - startTime) * 0.001;
+  gl.clearColor(0,0,0,1);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  gl.useProgram(prog);
+  gl.uniform1f(prog.uTime, seconds);
+  gl.uniform2f(prog.uRes, canvas.width, canvas.height);
+  // update mouse (normalized to [0,1] inside shader coordinates where vUv is 0..1)
+  gl.uniform2f(prog.uMouse, mouse.x, mouse.y);
+
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  requestAnimationFrame(render);
+}
+
+/* mouse handling for interactive effect */
+function setupInteraction(){
+  window.addEventListener('mousemove', (e)=>{
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = (e.clientX - rect.left) / rect.width;
+    mouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
+  });
+  window.addEventListener('touchmove', (e)=>{
+    const t0 = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = (t0.clientX - rect.left) / rect.width;
+    mouse.y = 1.0 - (t0.clientY - rect.top) / rect.height;
+  }, {passive:true});
+}
+
+/* start GL */
+initGL();
+setupInteraction();
+requestAnimationFrame(render);
+
+/* ------------------ Intro -> Main transition ------------------ */
+const intro = document.getElementById('intro');
+const site = document.getElementById('site');
+const getBtn = document.getElementById('getBtn');
+const typeSound = document.getElementById('typeSound');
+
+let soundAllowed = false;
+document.addEventListener('click', ()=> { soundAllowed = true; }, {once:true});
+
+/* smooth transition: fade out intro, fade in site */
+function goToSite(){
+  intro.classList.add('hidden');
+  // give time for fade out (.9s) then show site
+  setTimeout(()=>{
+    // stop pointer interactions on canvas
+    intro.style.pointerEvents = 'none';
+    // show site
+    site.classList.add('visible');
+    site.setAttribute('aria-hidden', 'false');
+    // focus panel for a11y
+    const firstPanel = document.querySelector('.panel');
+    if(firstPanel) firstPanel.focus();
+  }, 900);
+}
+
+/* Attach 'Get Started' */
+getBtn.addEventListener('click', ()=>{
+  // if sound allowed, play a small click / beep using WebAudio
+  if(soundAllowed){
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine'; o.frequency.value = 440;
+      g.gain.value = 0.002;
+      o.connect(g); g.connect(ctx.destination);
+      o.start(); setTimeout(()=>{ o.stop(); ctx.close(); }, 120);
+    } catch(e){}
+  }
+  goToSite();
+});
+
+/* Also allow clicking anywhere to go (optional) */
+canvas.addEventListener('click', ()=> { getBtn.click(); });
+
+/* ------------------ Terminal portfolio script (copied + slightly adapted) ------------------ */
 /* ---------- utility ---------- */
 function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 function makeLine(){ const d=document.createElement('div'); d.className='line'; return d; }
@@ -112,11 +534,9 @@ const introLines = [
 ];
 
 const out = document.getElementById('out');
-const typeSound = document.getElementById('typeSound');
-let soundAllowed = false;
-
-// enable sound after first interaction
-document.addEventListener('click',()=>{ soundAllowed=true; }, {once:true});
+let soundEnabledForTyping = false;
+document.addEventListener('click',()=>{ soundEnabledForTyping=true; }, {once:true});
+const typeAudio = document.getElementById('typeSound');
 
 /* type segments like code tokens */
 function typeLineSegments(segments, speedBase=16){
@@ -139,8 +559,8 @@ function typeLineSegments(segments, speedBase=16){
       if (charIndex < seg.t.length){
         span.textContent += seg.t[charIndex++];
         // typing sound
-        if (soundAllowed){
-          try { typeSound.currentTime = 0; typeSound.play().catch(()=>{}); } catch(e){}
+        if (soundEnabledForTyping){
+          try { typeAudio.currentTime = 0; typeAudio.play().catch(()=>{}); } catch(e){}
         }
         let dt = speedBase + Math.random()*18;
         if (seg.t[charIndex-1] === ' ') dt += 8;
@@ -164,7 +584,17 @@ async function runIntro(){
   out.appendChild(prompt);
   out.scrollTo({ top: out.scrollHeight, behavior: 'smooth' });
 }
-runIntro();
+
+/* init only when site becomes visible to avoid CPU while intro shows */
+let terminalStarted = false;
+function initTerminalWhenVisible(){
+  if(terminalStarted) return;
+  terminalStarted = true;
+  runIntro();
+}
+site.addEventListener('transitionend', (e)=>{
+  if(e.propertyName === 'opacity' && site.classList.contains('visible')) initTerminalWhenVisible();
+});
 
 /* ---------- controls ---------- */
 const btn1 = document.getElementById('btn1');
@@ -267,6 +697,8 @@ async function showPricePanel(){
 
 /* accessibility: click panel to focus output */
 document.querySelector('.panel').addEventListener('click', ()=> out.focus());
+
+/* cleanup: if user navigates back to intro we could restart but we keep it simple */
 </script>
 </body>
 </html>
